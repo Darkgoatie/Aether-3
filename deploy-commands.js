@@ -1,9 +1,12 @@
 const { REST } = require("@discordjs/rest");
-const rest = new REST({ version: '9' }).setToken(config.bot.token);
+const { Routes } = require("discord-api-types/v9");
+const { readdir } = require("fs");
+const path = require("path");
+const config = require("./config.json");
 
 const directoryPath = path.join(__dirname, 'Commands');
 
-fs.readdir(directoryPath, (err, files) => {
+readdir(directoryPath, (err, files) => {
     if (err) {
         return console.log("Unable to scan directory: " + err)
     }
@@ -17,5 +20,12 @@ fs.readdir(directoryPath, (err, files) => {
                 cmd.builder
             );
         }
-    })
+    });
+
+    commands.map(command => command.toJSON());
+    const rest = new REST({ version: '9' }).setToken(config.bot.token);
+
+    rest.put(Routes.applicationGuildCommands(config.bot.id, config.bot.serverid), { body: commands })
+        .then(console.log(`Deployed commands: [ ${commands.map(command => command.name).join(", ")} ]`))
+        .catch(console.error);
 });
