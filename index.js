@@ -18,4 +18,8 @@ client.on("interactionCreate", (interaction) => {
     }
 });
 
+client.once("ready", () => {
+    console.log(`Client ready at ${client.guilds.cache.size} servers.`);
+});
+
 client.login(config.bot.token);
