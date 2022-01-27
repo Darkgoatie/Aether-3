@@ -7,7 +7,7 @@ async function deploy() {
 
     const directoryPath = path.join(__dirname, 'Commands');
 
-    readdir(directoryPath, (err, files) => {
+    readdir(directoryPath, async (err, files) => {
         if (err) {
             return console.log("Unable to scan directory: " + err)
         }
