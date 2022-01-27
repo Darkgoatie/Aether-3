@@ -4,7 +4,14 @@ async function main () {
     const path = require("path")
     const config = require("./config.json");
 
-    const client = new Client({ intents: Intents.FLAGS.GUILDS });
+    const client = new Client({
+        intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+            Intents.FLAGS.GUILD_MEMBERS
+        ] 
+    });
+
     const directoryPath = path.join(__dirname, 'Commands');
 
     readdir(directoryPath, (err, files) => {
