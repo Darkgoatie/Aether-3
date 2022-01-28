@@ -28,7 +28,7 @@ async function main () {
         client.on("interactionCreate", (interaction) => {
             if(interaction.isCommand()) {
                 const cmd = commands.find(oksd => oksd.name === interaction.commandName);
-                cmd.onInteraction(interaction);
+                cmd.onInteraction({ int: interaction, client });
             }
         });
 

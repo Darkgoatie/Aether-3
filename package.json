@@ -4,8 +4,9 @@
   "description": "Aether, the discord bot",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
-    "start": "node index.js"
+    "deploy": "node deploy-commands.js",
+    "start": "node index.js",
+    "clear": "node clear-commands.js"
   },
   "author": "Darkgoatie",
   "license": "MIT",

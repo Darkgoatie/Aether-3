@@ -25,7 +25,6 @@ async function deploy() {
 
         commands.map(command => command.toJSON());
         const rest = new REST({ version: '9' }).setToken(config.bot.token);
-
         rest.put(Routes.applicationGuildCommands(config.bot.id, config.bot.serverid), { body: commands })
             .then(console.log(`Deployed commands: [ ${commands.map(command => command.name).join(", ")} ]`))
             .catch(console.error);

@@ -10,8 +10,7 @@ const builder =
         .setName(name)
         .setDescription(description);
 
-const onInteraction = async (int) => {
-
+const onInteraction = async ({ int }) => {
     const nextPageBtn = new MessageButton()
         .setCustomId(`helpNextPageBtn ${int.user.id}`)
         .setLabel("next page")
@@ -43,6 +42,7 @@ const onInteraction = async (int) => {
         {
             no: 1,
             content: createBaseEmbed()
+                .addField("User", "Subcommands: \n/user info - Displays someone's user info \n/user roles - Displys someone's roles in current guild (with IDs) ")
                 .setFooter({ iconURL: config.bot.iconURL, text: "Page 1/3 | Thank you for using Aether!" }),
         },
         {
@@ -67,7 +67,6 @@ const onInteraction = async (int) => {
         {
             if (pageNo === 1) 
             {
-                i.channel.send({ content: "There are no previous pages!"});
                 i.update({ components: [ row ], embeds: [ pages.find(page => page.no == pageNo).content ] });
             }
             else 
@@ -79,7 +78,6 @@ const onInteraction = async (int) => {
         else if (i.customId.startsWith("helpNext"))
         {
             if(pageNo === 3) {
-                i.channel.send({ content: "There are no next pages!" });
                 i.update({ components: [ row ], embeds: [ pages.find(page => page.no == pageNo).content ] });
             }
             else
