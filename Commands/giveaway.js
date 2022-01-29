@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 const { ChannelType } = require("discord-api-types/v9");
-const { Permissions } = require("discord.js");
+const { Permissions, MessageEmbed } = require("discord.js");
 const ms = require("ms");
 
 const name = "giveaway";
@@ -33,9 +33,18 @@ const builder =
                 .setDescription("Rerolls an ended giveaway")
                 .addStringOption(opt => opt.setName("id").setDescription("The ID of the giveaway that will be rerolled").setRequired(true))
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("list")
+                .setDescription("Lists filtered giveaways")
+                .addChannelOption(opt => opt.setName("channel").setDescription("Filter to see the giveaways of a channel.").addChannelType(ChannelType.GuildText))
+                .addStringOption(opt => opt.setName("prize").setDescription("Filter to see the giveaways of a prize."))
+                .addBooleanOption(opt => opt.setName("ended").setDescription("Filter to see the giveaways that are ended or not."))
+        )
 
 const onInteraction = async ({ int, client }) => {
-    if(int.options.getSubcommand() === 'start') {
+    if(int.options.getSubcommand() === 'start') 
+    {
         if(!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You need manage messages permissions to use this command!" });
         const gwLength = parseInt(ms(int.options.getString("time")));
         const winners = int.options.getNumber("winners") ? parseInt(int.options.getNumber("winners")) : 1;
@@ -53,9 +62,14 @@ const onInteraction = async ({ int, client }) => {
                 giveaway: "<:AetherGift:866637037607845929><:AetherGift:866637037607845929>Giveaway!<:AetherGift:866637037607845929><:AetherGift:866637037607845929>",
                 inviteToParticipate: "React with <:AetherGift:866637037607845929> to join!"
             },
+            extraData: {
+                hostedBy: int.user.id,
+            }
         });
         int.reply({ content: `A giveaway has been successfully started in <#${ giveawayChannel ? giveawayChannel.id : int.channel.id}> !`, ephemeral: true });
-    } else if (int.options.getSubcommand() === 'end') {
+    } 
+    else if (int.options.getSubcommand() === 'end') 
+    {
         let messageId = int.options.getString("id");
         messageId = messageId.includes("-") ? messageId.split("-")[1]: messageId;
         if(!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You need manage messages permissions to use this command!" });
@@ -65,8 +79,9 @@ const onInteraction = async ({ int, client }) => {
             }).catch((err) => {
                 int.reply({ ephemeral: true, content: `This giveaway was not found!` });
             });
-
-    } else if (int.options.getSubcommand() === 'reroll') {
+    } 
+    else if (int.options.getSubcommand() === 'reroll') 
+    {
         let messageId = int.options.getString("id");
         messageId = messageId.includes("-") ? messageId.split("-")[1]: messageId;
         if(!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You need manage messages permissions to use this command!" });
@@ -77,10 +92,43 @@ const onInteraction = async ({ int, client }) => {
                 int.reply({ ephemeral: true, content: `This giveaway was not found!` });
             });
     } 
-    // else if (int.options.getSubcommand() === 'list') 
-    // {
-    // 
-    // }
+    else if (int.options.getSubcommand() === 'list') 
+    {
+        let gws = client.giveawaysManager.giveaways;
+        const ftrChannel = int.options.getChannel("channel");
+        const ftrPrize = int.options.getString("prize");
+        const ftrEnded = int.options.getBoolean("ended");
+        gws = gws.filter((gw) => gw.guildId === int.guild.id);
+        if (ftrChannel !== null) gws = gws.filter((gw) => gw.channelId == ftrChannel.id);
+        if (ftrPrize !== null) gws = gws.filter((gw) => gw.prize == ftrPrize);
+        if (ftrEnded !== null) gws = gws.filter((gw) => gw.ended === ftrEnded);
+        if (gws.length < 1) return int.reply("Couldn't find any giveaways matching these tags!");
+        let n = 0;
+        gws = gws.map((gw) => {
+            n++;
+            return ({
+                val: `Channel: <#${gw.channelId}>, Prize: ${gw.prize} `,
+                nm: `Giveaway #${n}`
+            })
+        });
+
+        // This part was the hardest code i ever wrote :(
+        const embeds = [];
+        for (let embedCount = 0; embedCount < 10 && gws.length > 0; embedCount++) {
+            const emb = new MessageEmbed()
+                .setTitle("Giveaways list")
+                .setFooter({ text: `Page ${embedCount}` });
+
+            for (let fieldCount = 0; fieldCount < 25 && gws.length > 0; fieldCount) {
+                const data = gws.shift();
+                emb.addField(data.nm, data.val, true);
+            };
+            embeds.push(emb);
+        };
+        int.reply({
+            embeds
+        })
+    }
 }
 
 module.exports = {
