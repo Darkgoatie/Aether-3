@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed, MessageButton, MessageActionRow, Client, Base, Message, GuildEmojiRoleManager } = require("discord.js");
-const wait = require("util").promisify(setTimeout); 
 const config = require("../config.json");
 
 const name = "help";

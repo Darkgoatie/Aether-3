@@ -3,6 +3,8 @@ async function main () {
     const { readdir } = require("fs");
     const path = require("path")
     const config = require("./config.json");
+    const ManagerWithOwnDatabase = require("./giveawayManager.js");
+    const ms = require("ms");
 
     const client = new Client({
         intents: [
@@ -10,6 +12,18 @@ async function main () {
             Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
             Intents.FLAGS.GUILD_MEMBERS
         ] 
+    });
+
+
+    client.giveawaysManager = new ManagerWithOwnDatabase(client, {
+        endedGiveawaysLifetime: ms("7d"),
+        forceUpdateEvery: ms("10s"),
+        default: {
+            botsCanWin: false,
+            embedColor: "AQUA",
+            embedColorEnd: "DARK_GOLD",
+            reaction: "866637037607845929"
+        }
     });
 
     const directoryPath = path.join(__dirname, 'Commands');
@@ -38,7 +52,7 @@ async function main () {
 
         client.login(config.bot.token);
 
-    })
+    });
 }
 
 main();

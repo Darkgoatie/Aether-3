@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
 const config = require("../config.json");
 
 const name = "user";
@@ -122,9 +122,9 @@ const onInteraction = async ({ int }) => {
                     .setThumbnail(user.avatarURL()) 
                 ]});
             });
-        };
+        }
     } else if (int.options.getSubcommand() === 'roles') {
-        const user = int.options.getUser('user');
+        const user = int.options.getUser("user")
         const mem = await int.guild.members.fetch(user.id);
         if(!mem) return;
         const roles = [];
