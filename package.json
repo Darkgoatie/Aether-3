@@ -16,6 +16,7 @@
     "discord-api-types": "^0.26.1",
     "discord-giveaways": "^5.1.0",
     "discord.js": "^13.6.0",
+    "dotenv": "^14.3.2",
     "mongoose": "^6.1.8",
     "ms": "^2.1.3"
   },
@@ -24,8 +25,8 @@
   },
   "homepage": "https://aether.vercel.app/",
   "bugs": {
-    "url" : "https://github.com/darkgoatie/Aether-3/issues",
-    "email" : "haliterenozkir@gmail.com"
+    "url": "https://github.com/darkgoatie/Aether-3/issues",
+    "email": "haliterenozkir@gmail.com"
   },
   "repository": {
     "type": "git",
