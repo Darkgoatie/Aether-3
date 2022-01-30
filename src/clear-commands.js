@@ -2,12 +2,12 @@ async function clear() {
     const { REST } = require("@discordjs/rest");
     const { Routes } = require("discord-api-types/v9");
     const config = require("./config.json");
-    const rest = new REST({ version: '9' }).setToken(config.bot.token);
-    rest.get(Routes.applicationGuildCommands(config.bot.id, config.bot.serverid))
+    const rest = new REST({ version: '9' }).setToken(process.env.token);
+    rest.get(Routes.applicationGuildCommands(process.env.id, process.env.serverid))
         .then(data => {
             const promises = [];
             for (const command of data) {
-                const deleteUrl = `${Routes.applicationGuildCommands(config.bot.id, config.bot.serverid)}/${command.id}`;
+                const deleteUrl = `${Routes.applicationGuildCommands(process.env.id, process.env.serverid)}/${command.id}`;
                 console.log(`deleted ${command.name}`)
                 promises.push(rest.delete(deleteUrl));
             }

@@ -64,7 +64,7 @@ async function main () {
         };
     });
 
-    client.login(config.bot.token)
+    client.login(process.env.token)
 }
 
 main();

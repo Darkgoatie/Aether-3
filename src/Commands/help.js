@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { MessageEmbed, MessageButton, MessageActionRow, Client, Base, Message, GuildEmojiRoleManager } = require("discord.js");
+const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 const config = require("../config.json");
 
 const name = "help";
@@ -42,17 +42,18 @@ const onInteraction = async ({ int }) => {
             no: 1,
             content: createBaseEmbed()
                 .addField("User", "Subcommands: \n/user info - Displays someone's user info \n/user roles - Displys someone's roles in current guild (with IDs) ")
-                .setFooter({ iconURL: config.bot.iconURL, text: "Page 1/3 | Thank you for using Aether!" }),
+                .addField("Giveaway", "Subcommands: \n/giveaway start <Options> - Starts a giveaway \n/giveaway end <Options> - Ends a giveaway\n/giveaway reroll <Options>\n/giveaway reroll <Options> - Rerolls a giveaway that has already ended.")
+                .setFooter({ iconURL: process.env.iconURL, text: "Page 1/3 | Thank you for using Aether!" }),
         },
         {
             no: 2,
             content: createBaseEmbed()
-                .setFooter({ iconURL: config.bot.iconURL, text: "Page 2/3 | Thank you for using Aether!" }),
+                .setFooter({ iconURL: process.env.iconURL, text: "Page 2/3 | Thank you for using Aether!" }),
         },
         {
             no: 3,
             content: createBaseEmbed()
-                .setFooter({ iconURL: config.bot.iconURL, text: "Page 3/3 | Thank you for using Aether!" }),
+                .setFooter({ iconURL: process.env.iconURL, text: "Page 3/3 | Thank you for using Aether!" }),
         }
     ];
 

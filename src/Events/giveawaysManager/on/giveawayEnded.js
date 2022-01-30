@@ -12,7 +12,7 @@ const onGiveawayEnded = async (giveaway, winners) => {
                     .setEmoji("866637037607845929"),
                 new MessageButton()
                     .setStyle("LINK")
-                    .setURL(`https://discord.com/api/oauth2/authorize?client_id=${config.bot.id}&permissions=8&scope=bot%20applications.commands`)
+                    .setURL(`https://discord.com/api/oauth2/authorize?client_id=${process.env.id}&permissions=8&scope=bot%20applications.commands`)
                     .setLabel("Invite Aether")
                     .setEmoji("937284368202891295")
             );
@@ -27,7 +27,7 @@ const onGiveawayEnded = async (giveaway, winners) => {
                         .setTitle("Giveaway Results!")
                         .setThumbnail(member.displayAvatarURL())
                         .setDescription(`Congrats, **${member.user.tag}**! You are one of the winners of the giveaway for **__${giveaway.prize}__**!`)
-                        .setAuthor({ iconURL: config.bot.iconURL, name: "Giveaway was hosted with Aether", url: `https://discord.com/api/oauth2/authorize?client_id=${config.bot.id}&permissions=8&scope=bot%20applications.commands` })
+                        .setAuthor({ iconURL: process.env.iconURL, name: "Giveaway was hosted with Aether", url: `https://discord.com/api/oauth2/authorize?client_id=${process.env.id}&permissions=8&scope=bot%20applications.commands` })
                 ],
                 components: [
                     row

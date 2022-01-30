@@ -49,7 +49,7 @@ const onInteraction = async ({ int }) => {
                 embeds: [
                     new MessageEmbed()
                     .setTitle("User Info")
-                    .setFooter({ iconURL: config.bot.iconURL, text: "Thank you for using Aether!" })
+                    .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
                     .setColor("RANDOM")
                     .addField("ID", user.id, true)
                     .addField("Tag", user.tag, true)
@@ -70,7 +70,7 @@ const onInteraction = async ({ int }) => {
                 sentMessage.edit({ components: [ row ], embeds: [                     
                     new MessageEmbed()
                     .setTitle("User Info")
-                    .setFooter({ iconURL: config.bot.iconURL, text: "Thank you for using Aether!" })
+                    .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
                     .setColor("RANDOM")
                     .addField("ID", user.id, true)
                     .addField("Tag", user.tag, true)
@@ -88,7 +88,7 @@ const onInteraction = async ({ int }) => {
                     embeds: [
                         new MessageEmbed()
                             .setTitle("Security level of user")
-                            .setFooter({ iconURL: config.bot.iconURL, text: "Thank you for using Aether!" })
+                            .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
                             .setDescription(
                                 `Is not an automation +1
                                 Account older than:
@@ -113,7 +113,7 @@ const onInteraction = async ({ int }) => {
                 sentMessage.edit({ components: [ row ], embeds: [                     
                     new MessageEmbed()
                     .setTitle("User Info")
-                    .setFooter({ iconURL: config.bot.iconURL, text: "Thank you for using Aether!" })
+                    .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
                     .setColor("RANDOM")
                     .addField("ID", user.id, true)
                     .addField("Tag", user.tag, true)
@@ -136,7 +136,7 @@ const onInteraction = async ({ int }) => {
                 new MessageEmbed()
                     .setTimestamp(new Date())
                     .setAuthor({ iconURL: int.user.displayAvatarURL(), "name": `Command used by ${int.user.tag}` })
-                    .setFooter({ iconURL: config.bot.iconURL, text: "Thank you for using Aether!" })
+                    .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
                     .setDescription(roles.join(" \n"))
                     .setTitle(`Roles of ${user.tag}`)
             ]
