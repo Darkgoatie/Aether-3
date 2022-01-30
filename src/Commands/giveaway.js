@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 const { ChannelType } = require("discord-api-types/v9");
 const { Permissions, MessageEmbed } = require("discord.js");
+const gConfModel = require("../guildManager.js");
 const ms = require("ms");
 
 const name = "giveaway";
@@ -41,6 +42,12 @@ const builder =
                 .addStringOption(opt => opt.setName("prize").setDescription("Filter to see the giveaways of a prize."))
                 .addBooleanOption(opt => opt.setName("ended").setDescription("Filter to see the giveaways that are ended or not."))
         )
+        .addSubcommand(
+            new SlashCommandSubcommandBuilder()
+                .setName("setemoji")
+                .setDescription("Sets the default giveaway emoji for this server.")
+                .addStringOption(opt => opt.setName("emoji").setDescription("The name of the emoji that'll be set as default"))
+        )
 
 const onInteraction = async ({ int, client }) => {
     if(int.options.getSubcommand() === 'start') 
@@ -63,7 +70,7 @@ const onInteraction = async ({ int, client }) => {
                 inviteToParticipate: "React with <:AetherGift:866637037607845929> to join!"
             },
             extraData: {
-                hostedBy: int.user.id,
+                hostedBy: int.user.id
             }
         });
         int.reply({ content: `A giveaway has been successfully started in <#${ giveawayChannel ? giveawayChannel.id : int.channel.id}> !`, ephemeral: true });

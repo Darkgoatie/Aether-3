@@ -10,5 +10,12 @@ const gConfSchema = new mongoose.Schema({
         managerRoles: [String],
         emoji: String,
         bypassRoles: [String]
+    },
+    auctionSettings: {
+        managerRoles: [String]
     }
 }, { id: false });  
+
+const gConfModel = mongoose.model("guildConfig", gConfSchema);
+
+module.exports = gConfModel;
