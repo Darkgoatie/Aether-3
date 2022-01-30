@@ -1,10 +1,9 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
-const config = require("../config.json");
 
 const name = "help";
 const description = "Shows the help menu";
-const builder = 
+const builder =
     new SlashCommandBuilder()
         .setName(name)
         .setDescription(description);
@@ -15,7 +14,7 @@ const onInteraction = async ({ int }) => {
         .setLabel("next page")
         .setStyle("SECONDARY")
         .setEmoji("935822618223849582");
-    
+
     const prevPageBtn = new MessageButton()
         .setCustomId(`helpPrevPageBtn-${int.user.id}`)
         .setLabel("previous page")
@@ -65,12 +64,12 @@ const onInteraction = async ({ int }) => {
     collector.on('collect', async i => {
         if (i.customId.startsWith("helpPrev"))
         {
-            if (pageNo === 1) 
+            if (pageNo === 1)
             {
                 i.update({ components: [ row ], embeds: [ pages.find(page => page.no == pageNo).content ] });
             }
-            else 
-            {            
+            else
+            {
                 pageNo--;
                 i.update({ components: [ row ], embeds: [ pages.find(page => page.no == pageNo).content ] });
             }

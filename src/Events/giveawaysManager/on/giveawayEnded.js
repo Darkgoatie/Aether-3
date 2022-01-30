@@ -1,5 +1,4 @@
 const onGiveawayEnded = async (giveaway, winners) => {
-    const config = require("../../../config.json");
     const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
     let time = 0;
     winners.forEach(member => {
@@ -16,8 +15,8 @@ const onGiveawayEnded = async (giveaway, winners) => {
                     .setLabel("Invite Aether")
                     .setEmoji("937284368202891295")
             );
-        
-        
+
+
 
         time += 3e3;
         setTimeout(() => {

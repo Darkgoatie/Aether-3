@@ -3,7 +3,6 @@ async function deploy() {
     const { Routes } = require("discord-api-types/v9");
     const { readdir } = require("fs");
     const path = require("path");
-    const config = require("./config.json");
 
     const directoryPath = path.join(__dirname, 'Commands');
 

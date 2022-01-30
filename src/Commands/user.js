@@ -1,10 +1,9 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require("@discordjs/builders");
 const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
-const config = require("../config.json");
 
 const name = "user";
 const description = "User commands menu";
-const builder = 
+const builder =
     new SlashCommandBuilder()
         .setName(name)
         .setDescription(description)
@@ -28,7 +27,7 @@ const onInteraction = async ({ int }) => {
         '#FF7518',
         '#FFFF00',
         '#00FF00',
-        '#00FFFF' 
+        '#00FFFF'
     ];
 
     const checkSafetyBtn = new MessageButton()
@@ -43,7 +42,7 @@ const onInteraction = async ({ int }) => {
     if (int.options.getSubcommand() === 'info') {
         int.reply({ content: "Command was successful!", ephemeral: true });
         const user = int.options.getUser('user');
-        if ( user ) 
+        if ( user )
         {
             const sentMessage = await int.channel.send({
                 embeds: [
@@ -54,20 +53,20 @@ const onInteraction = async ({ int }) => {
                     .addField("ID", user.id, true)
                     .addField("Tag", user.tag, true)
                     .addField("Profile Picture", `[URL](${user.avatarURL()})`, true)
-                    .setThumbnail(user.avatarURL()) 
+                    .setThumbnail(user.avatarURL())
                     .setAuthor({ iconURL: int.user.displayAvatarURL(), "name": `Command used by ${int.user.tag}` })
                 ],
                 components: [
                     row
                 ]
             })
-            
+
             const filter = i => i.customId.startsWith("userInfoCheckSafetyBtn") && i.customId.endsWith(int.user.id);
             const collector = int.channel.createMessageComponentCollector({ filter, time: 15e3 });
 
             collector.on('collect', async i => {
-                row.components[0].setDisabled();                
-                sentMessage.edit({ components: [ row ], embeds: [                     
+                row.components[0].setDisabled();
+                sentMessage.edit({ components: [ row ], embeds: [
                     new MessageEmbed()
                     .setTitle("User Info")
                     .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
@@ -75,7 +74,7 @@ const onInteraction = async ({ int }) => {
                     .addField("ID", user.id, true)
                     .addField("Tag", user.tag, true)
                     .addField("Profile Picture", `[URL](${user.avatarURL()})`, true)
-                    .setThumbnail(user.avatarURL()) 
+                    .setThumbnail(user.avatarURL())
                     .setAuthor({ iconURL: int.user.displayAvatarURL(), "name": `Command used by ${int.user.tag}` })
                 ]});
                 let safetyLVL = 0;
@@ -95,7 +94,7 @@ const onInteraction = async ({ int }) => {
                                 120 days: ${Date.now() - user.createdAt > 1000*60*60*24*120 ? "+1" : "+0"}
                                 240 days: ${Date.now() - user.createdAt > 1000*60*60*24*240 ? "+1" : "+0"}
                                 360 days: ${Date.now() - user.createdAt > 1000*60*60*24*360 ? "+1" : "+0"}
-                                Profile Picture is not default: ${user.avatarURL() !== null ? "+1" : "+0"} 
+                                Profile Picture is not default: ${user.avatarURL() !== null ? "+1" : "+0"}
                                 --------------------------
                                 Total Security Score: ${safetyLVL + 1}/5
                                 `
@@ -105,12 +104,12 @@ const onInteraction = async ({ int }) => {
                             .setColor(SafetyColors[safetyLVL])
                     ]
                 })
-                
+
             });
 
             collector.on('end', async () => {
                 row.components[0].setDisabled();
-                sentMessage.edit({ components: [ row ], embeds: [                     
+                sentMessage.edit({ components: [ row ], embeds: [
                     new MessageEmbed()
                     .setTitle("User Info")
                     .setFooter({ iconURL: process.env.iconURL, text: "Thank you for using Aether!" })
@@ -119,7 +118,7 @@ const onInteraction = async ({ int }) => {
                     .addField("Tag", user.tag, true)
                     .addField("Profile Picture", `[URL](${user.avatarURL()})`, true)
                     .setAuthor({ iconURL: int.user.displayAvatarURL(), "name": `Command used by ${int.user.tag}` })
-                    .setThumbnail(user.avatarURL()) 
+                    .setThumbnail(user.avatarURL())
                 ]});
             });
         }

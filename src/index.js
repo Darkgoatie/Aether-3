@@ -3,7 +3,6 @@ const { Client, Intents } = require("discord.js");
 async function main () {
     const { readdirSync } = require("fs");
     const path = require("path")
-    const config = require("./config.json");
     const ManagerWithOwnDatabase = require("./giveawayManager.js");
     const ms = require("ms");
 
@@ -26,7 +25,7 @@ async function main () {
     });
 
     const commandFiles = readdirSync(path.join(__dirname, 'Commands'));
-    const commands = [];    
+    const commands = [];
     commandFiles.forEach((file) => {
         if(file.endsWith(".js")){
             commands.push(require(`./Commands/${file}`));
