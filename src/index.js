@@ -1,6 +1,6 @@
-const { Client, Intents } = require("discord.js");
-
 async function main () {
+    const { Client, Intents } = require("discord.js");
+    const { runExp } = require("./express.js");
     const { readdirSync } = require("fs");
     const path = require("path")
     const ManagerWithOwnDatabase = require("./giveawayManager.js");
@@ -64,6 +64,7 @@ async function main () {
     });
 
     client.login(process.env.token)
+    runExp();
 }
 
 main();
