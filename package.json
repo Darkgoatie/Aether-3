@@ -2,11 +2,11 @@
   "name": "aether-discord",
   "version": "3.0.0",
   "description": "Aether, the discord bot",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "deploy": "node deploy-commands.js",
-    "start": "node index.js",
-    "clear": "node clear-commands.js"
+    "deploy": "node src/deploy-commands.js",
+    "start": "node src/index.js",
+    "clear": "node src/clear-commands.js"
   },
   "author": "Darkgoatie",
   "license": "MIT",
@@ -21,5 +21,14 @@
   },
   "devDependencies": {
     "eslint": "^8.7.0"
+  },
+  "homepage": "https://aether.vercel.app/",
+  "bugs": {
+    "url" : "https://github.com/darkgoatie/Aether-3/issues",
+    "email" : "haliterenozkir@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Darkgoatie/Aether-3.git"
   }
 }
