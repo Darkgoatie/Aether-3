@@ -1,4 +1,5 @@
 async function deploy() {
+    require("dotenv").config();
     const { REST } = require("@discordjs/rest");
     const { Routes } = require("discord-api-types/v9");
     const { readdir } = require("fs");
@@ -24,9 +25,9 @@ async function deploy() {
 
         commands.map(command => command.toJSON());
         const rest = new REST({ version: '9' }).setToken(process.env.token);
-        rest.put(Routes.applicationGuildCommands(process.env.id, process.env.serverid), { body: commands })
+        rest.put(Routes.applicationCommands(process.env.id), { body: commands })
+            .catch(console.error)
             .then(console.log(`Deployed commands: [ ${commands.map(command => command.name).join(", ")} ]`))
-            .catch(console.error);
     });
 }
 
