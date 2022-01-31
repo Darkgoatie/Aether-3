@@ -14,12 +14,12 @@ const builder =
             new SlashCommandSubcommandBuilder()
                 .setName("start")
                 .setDescription("Starts a giveaway")
-                // .addNumberOption(opt => opt.setName("days").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(6))
-                // .addNumberOption(opt => opt.setName("hours").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(23))
-                // .addNumberOption(opt => opt.setName("minutes").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(59))
+                // .addIntegerOption(opt => opt.setName("days").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(6))
+                // .addIntegerOption(opt => opt.setName("hours").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(23))
+                // .addIntegerOption(opt => opt.setName("minutes").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(59))
                 .addStringOption(opt => opt.setName("time").setDescription("The time the giveaway will end in.").setRequired(true))
                 .addStringOption(opt => opt.setName("prize").setDescription("The Prize of the giveaway").setRequired(true))
-                .addNumberOption(opt => opt.setName("winners").setDescription("The amount of winners in this giveaway").setMaxValue(10).setMinValue(1))
+                .addIntegerOption(opt => opt.setName("winners").setDescription("The amount of winners in this giveaway").setMaxValue(10).setMinValue(1))
                 .addChannelOption(opt => opt.setName("channel").setDescription("The channel to put the giveaway in").addChannelType(ChannelType.GuildText))
         )
         .addSubcommand(
@@ -60,7 +60,7 @@ const onInteraction = async ({ int, client }) => {
         };
         if(!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You need manage messages permissions to use this command!" });
         const gwLength = parseInt(ms(int.options.getString("time")));
-        const winners = int.options.getNumber("winners") ? parseInt(int.options.getNumber("winners")) : 1;
+        const winners = int.options.getInteger("winners") ? parseInt(int.options.getInteger("winners")) : 1;
         const prize = int.options.getString("prize");
         const giveawayChannel = int.options.getChannel("channel");
 
