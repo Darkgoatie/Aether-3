@@ -1,4 +1,5 @@
 async function clear() {
+    require("dotenv").config();
     const { REST } = require("@discordjs/rest");
     const { Routes } = require("discord-api-types/v9");
     const rest = new REST({ version: '9' }).setToken(process.env.token);
