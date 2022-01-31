@@ -2,7 +2,7 @@ const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require("@discord
 const { MessageEmbed, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
 
 const name = "user";
-const description = "User commands menu";
+const description = "Base User Command";
 const builder =
     new SlashCommandBuilder()
         .setName(name)

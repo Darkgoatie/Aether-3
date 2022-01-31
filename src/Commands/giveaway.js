@@ -5,7 +5,7 @@ const gConfModel = require("../guildManager.js");
 const ms = require("ms");
 
 const name = "giveaway";
-const description = "Giveaway"
+const description = "Base Giveaway Command"
 const builder = 
     new SlashCommandBuilder()
         .setName(name)
