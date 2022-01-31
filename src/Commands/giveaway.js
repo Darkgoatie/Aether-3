@@ -46,12 +46,18 @@ const builder =
             new SlashCommandSubcommandBuilder()
                 .setName("setemoji")
                 .setDescription("Sets the default giveaway emoji for this server.")
-                .addStringOption(opt => opt.setName("emoji").setDescription("The name of the emoji that'll be set as default"))
+                .addStringOption(opt => opt.setName("emoji").setDescription("The name of the emoji that'll be set as default").setRequired(true))
         )
 
 const onInteraction = async ({ int, client }) => {
+    const thisGuildConf = (await gConfModel.find({ guildId: int.guild.id }).exec())[0];
+
     if(int.options.getSubcommand() === 'start') 
     {
+        let Cemoji = "866637037607845929";
+        if ( typeof thisGuildConf.giveawaySettings.emoji !== undefined || thisGuildConf.giveawaySettings.emoji === null || typeof int.guild.emojis.find(e => e.id === thisGuildConf.giveawaySettings.emoji) !== "undefined") {
+            Cemoji = int.guild.emojis.cache.find(e => e.id === thisGuildConf.giveawaySettings.emoji).identifier;
+        };
         if(!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You need manage messages permissions to use this command!" });
         const gwLength = parseInt(ms(int.options.getString("time")));
         const winners = int.options.getNumber("winners") ? parseInt(int.options.getNumber("winners")) : 1;
@@ -67,8 +73,9 @@ const onInteraction = async ({ int, client }) => {
             messages: {
                 giveawayEnded: "<:AetherGift:866637037607845929><:AetherGift:866637037607845929>Giveaway ended!<:AetherGift:866637037607845929><:AetherGift:866637037607845929>",
                 giveaway: "<:AetherGift:866637037607845929><:AetherGift:866637037607845929>Giveaway!<:AetherGift:866637037607845929><:AetherGift:866637037607845929>",
-                inviteToParticipate: "React with <:AetherGift:866637037607845929> to join!"
+                inviteToParticipate: "React with <:AetherGift:866637037607845929> to join!",
             },
+            reaction: Cemoji,
             extraData: {
                 hostedBy: int.user.id
             }
@@ -135,6 +142,15 @@ const onInteraction = async ({ int, client }) => {
         int.reply({
             embeds
         })
+    }
+    else if (int.options.getSubcommand() === 'setemoji')
+    {
+        if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return int.reply({ ephemeral: true, content: "You need manage guild permissions to use this command!" });
+        const emojiName = int.options.getString("emoji");
+        const emoji = int.guild.emojis.cache.find(emj => emj.name === emojiName);
+        if(typeof emoji === "undefined" || emoji === null) return int.reply({ ephemeral: true, content: `Emoji was not found! Query: { name: ${emojiName} }` });
+        await gConfModel.updateOne({ guildId: int.guild.id }, { giveawaySettings: { emoji: emoji.id } });
+        return int.reply({ content: `Giveaway default emoji was updated. New Emoji: <:${emoji.name}:${emoji.id}>` });
     }
 }
 
