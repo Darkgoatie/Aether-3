@@ -9,6 +9,10 @@ async function runExp({ voteCallback }) {
     // define the first route
     app.post("/votes", Hook.listener(voteCallback));
 
+    app.get("/", async (req, res) => {
+        res.send("<h1>This is the Aether api! Please don't interact with unless you are given permission to!</h1>")
+    })
+
     // start the server listening for requests
     app.listen(process.env.PORT || 3000, 
     	() => console.log("Server is running...")
