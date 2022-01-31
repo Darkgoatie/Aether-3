@@ -5,6 +5,7 @@ async function main () {
     const path = require("path")
     const ManagerWithOwnDatabase = require("./giveawayManager.js");
     const ms = require("ms");
+    const voteModel = require("./voteManager.js");
 
     const client = new Client({
         intents: [
@@ -68,6 +69,25 @@ async function main () {
         client,
         voteCallback: async (vote) => {
             const u = await client.users.fetch(vote.user);
+            if (u === null || u === undefined) return;
+            let thisUser = (await voteModel.find({ userId: vote.user }).exec())[0]
+            if (thisUser === undefined) {
+                await voteModel.create({
+                    userId: vote.user,
+                    voteCount: 0,
+                    lastVote: Date.now()
+                });
+            } 
+            else
+            {
+                const vCount = thisUser.voteCount + 1;
+                const lVote = Date.now();
+                await voteModel.updateOne({ userId: vote.user }, { 
+                    lastVote: lVote,
+                    voteCount: vCount
+                });
+            };
+
             await u.send(
                 { 
                     embeds: [
@@ -87,7 +107,7 @@ async function main () {
                             )
                     ]
                 }
-            )
+            );
         }
     });
 }
