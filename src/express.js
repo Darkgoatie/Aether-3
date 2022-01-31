@@ -1,18 +1,18 @@
-async function runExp() {
+async function runExp({ voteCallback }) {
+    require("dotenv").config();
     const express = require("express");
     const app = express();
+    const Topgg = require("@top-gg/sdk");
 
-    // use the express-static middleware
     app.use(express.static("public"));
-
+    const Hook = new Topgg.Webhook(process.env.TopggAuth);
     // define the first route
-    app.get("/", function (req, res) {
-      res.send("<h1>Hello World!</h1>");
-    });
+    app.post("/votes", Hook.listener(voteCallback));
 
     // start the server listening for requests
     app.listen(process.env.PORT || 3000, 
-    	() => console.log("Server is running..."));
+    	() => console.log("Server is running...")
+    );
 }
 
 module.exports = {

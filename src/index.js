@@ -1,5 +1,5 @@
 async function main () {
-    const { Client, Intents } = require("discord.js");
+    const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
     const { runExp } = require("./express.js");
     const { readdirSync } = require("fs");
     const path = require("path")
@@ -64,7 +64,32 @@ async function main () {
     });
 
     client.login(process.env.token)
-    runExp();
+    runExp({
+        client,
+        voteCallback: async (vote) => {
+            const u = await client.users.fetch(vote.user);
+            await u.send(
+                { 
+                    embeds: [
+                    new MessageEmbed()
+                        .setTitle("Vote Recieved!")
+                        .setColor("RANDOM")
+                        .setDescription("Your vote for Aether on top.gg has been recieved! Thanks for voting us! You can vote once again in 12 hours using the link below!")
+                    ],
+                    components: [
+                        new MessageActionRow()
+                            .addComponents(
+                                new MessageButton()
+                                    .setLabel("Vote again!")
+                                    .setStyle("LINK")
+                                    .setURL("https://aether.vercel.app/vote")
+                                    .setEmoji("937608329734291496")
+                            )
+                    ]
+                }
+            )
+        }
+    });
 }
 
 main();
