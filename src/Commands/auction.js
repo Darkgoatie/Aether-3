@@ -36,6 +36,7 @@ const onInteraction = async ({ int }) => {
     if (int.options.getSubcommand() === 'start') {
         if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You don't have the manage messages permissions that are required for this command!" });
         const channel = int.options.getChannel("channel") !== null ? int.options.getChannel("channel") : int.channel;
+        await int.deferReply();
         let auc = await auctionManager.find({ channelId: channel.id }).exec();
         if (auc[0] !== undefined) return int.reply({ ephemeral: true, content: "There is already an active auction in this channel!" });
         const bid = int.options.getInteger("startingprice");
@@ -74,6 +75,7 @@ const onInteraction = async ({ int }) => {
         if (auc === undefined) return int.reply({ ephemeral: true, content: "Couldn't find any active auctions in this channel!"});
         const bid = int.options.getInteger("amount");
         if (bid <= auc.price) return int.reply({ ephemeral: true, content: `You should give a higher amount than the current bid! The current bid is ${auc.price}`});
+        await int.deferReply();
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -105,8 +107,10 @@ const onInteraction = async ({ int }) => {
     {
         const channel = int.options.getChannel("channel") !== null ? int.options.getChannel("channel") : int.channel;
         const auc = (await auctionManager.find({ channelId: channel.id }).exec())[0];
+        console.log(auc)
         if (auc === undefined) return int.reply({ ephemeral: true, content: "Couldn't find any active auctions in this channel!"});
         if (auc.hostedBy !== int.user.id && !int.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return int.reply({ ephemeral: true, content: "You should either have started the auction, or should have manage guild permissions to end it!" });
+        await int.deferReply();
         const sent = await channel.send({
             embeds: [
                 new MessageEmbed()
