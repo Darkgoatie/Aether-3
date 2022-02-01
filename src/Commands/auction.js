@@ -118,7 +118,7 @@ const onInteraction = async ({ int }) => {
                         url: "https://aether.vercel.app/invite"
                     })
                     .addField(`Sold at (Price)`, `${auc.price}`)
-                    .addField(`Sold to`, auc.winner)
+                    .addField(`Sold to`, auc.winner !== undefined ? auc.winner : "No one!")
                     .addField("Item sold", auc.item)
                     .addField("Total bids", `${auc.totalBids}`)
                     .addField("Hosted by", `${int.user.tag}`)
