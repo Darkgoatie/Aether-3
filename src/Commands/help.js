@@ -40,13 +40,14 @@ const onInteraction = async ({ int }) => {
         {
             no: 1,
             content: createBaseEmbed()
-                .addField("User", "Subcommands: \n/user info - Displays someone's user info \n/user roles - Displys someone's roles in current guild (with IDs) ")
+                .addField("User", "Subcommands: \n/user info <User> - Displays someone's user info \n/user roles <User> - Displys someone's roles in current guild (with IDs) ")
                 .addField("Giveaway", "Subcommands: \n/giveaway start <Options> - Starts a giveaway \n/giveaway end <Options> - Ends a giveaway\n/giveaway reroll <Options> - Rerolls a giveaway that has already ended.\n/giveaway setemoji <EmojiName> - Sets a new default giveaway emoji for current server.")
                 .setFooter({ iconURL: process.env.iconURL, text: "Page 1/3 | Thank you for using Aether!" }),
         },
         {
             no: 2,
             content: createBaseEmbed()
+                .addField("Auction", "Subcommands: \n/auction start <Options> - Starts an auction in the current/given channel\n/auction bid <Amount> - Bids on the auction of the current channel\n/auction end <Channel> - Ends the auction of the current/given channel")
                 .setFooter({ iconURL: process.env.iconURL, text: "Page 2/3 | Thank you for using Aether!" }),
         },
         {
