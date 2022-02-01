@@ -31,17 +31,16 @@ const builder =
                 .addChannelOption(opt => opt.addChannelType(ChannelType.GuildText).setName("channel").setDescription("The channel to end the giveaway of. if left blank, current channel will be used."))
         );
 
-const onInteraction = async ({ int }) => {
+const onInteraction = async ({ int, client }) => {
     require('dotenv').config();
     if (int.options.getSubcommand() === 'start') {
         if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES)) return int.reply({ ephemeral: true, content: "You don't have the manage messages permissions that are required for this command!" });
         const channel = int.options.getChannel("channel") !== null ? int.options.getChannel("channel") : int.channel;
-        await int.deferReply();
         let auc = await auctionManager.find({ channelId: channel.id }).exec();
-        if (auc[0] !== undefined) return int.editReply({ ephemeral: true, content: "There is already an active auction in this channel!" });
+        if (auc[0] !== undefined) return await int.reply({ ephemeral: true, content: "There is already an active auction in this channel!" });
         const bid = int.options.getInteger("startingprice");
         const itm = int.options.getString("item");
-        int.editReply({ ephemeral: true, content: "Auction was started!" });
+        await int.reply({ ephemeral: true, content: "Auction was started!" });
         const sent = await channel.send({
             embeds: [
                 new MessageEmbed()
@@ -75,7 +74,6 @@ const onInteraction = async ({ int }) => {
         if (auc === undefined) return int.reply({ ephemeral: true, content: "Couldn't find any active auctions in this channel!"});
         const bid = int.options.getInteger("amount");
         if (bid <= auc.price) return int.reply({ ephemeral: true, content: `You should give a higher amount than the current bid! The current bid is ${auc.price}`});
-        await int.deferReply();
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton()
@@ -85,7 +83,7 @@ const onInteraction = async ({ int }) => {
                     .setURL(`https://discord.com/channels/${auc.guildId}/${auc.channelId}/${auc.messageId}`)
             );
         await auctionManager.updateOne({ channelId: int.channel.id }, { winner: int.user.id, price: bid, totalBids: auc.totalBids + 1 });
-        int.editReply({
+        await int.reply({
             embeds: [
                 new MessageEmbed()
                     .setTitle("New bid!")
@@ -97,6 +95,7 @@ const onInteraction = async ({ int }) => {
                     .setThumbnail(int.guild.iconURL() !== null ? int.guild.iconURL() : process.env.iconURL)
                     .setColor("RANDOM")
                     .setDescription(`New bid for **${auc.item}** by __${int.user.tag}__!`)
+                    .addField("Amount", `${bid}`)
             ],
             components: [
                 row
@@ -107,10 +106,8 @@ const onInteraction = async ({ int }) => {
     {
         const channel = int.options.getChannel("channel") !== null ? int.options.getChannel("channel") : int.channel;
         const auc = (await auctionManager.find({ channelId: channel.id }).exec())[0];
-        console.log(auc)
         if (auc === undefined) return int.reply({ ephemeral: true, content: "Couldn't find any active auctions in this channel!"});
         if (auc.hostedBy !== int.user.id && !int.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)) return int.reply({ ephemeral: true, content: "You should either have started the auction, or should have manage guild permissions to end it!" });
-        await int.deferReply();
         const sent = await channel.send({
             embeds: [
                 new MessageEmbed()
@@ -122,7 +119,7 @@ const onInteraction = async ({ int }) => {
                         url: "https://aether.vercel.app/invite"
                     })
                     .addField(`Sold at (Price)`, `${auc.price}`)
-                    .addField(`Sold to`, auc.winner !== undefined ? auc.winner : "No one!")
+                    .addField(`Sold to`, auc.winner !== undefined ? `<@${auc.winner}>` : "No one!")
                     .addField("Item sold", auc.item)
                     .addField("Total bids", `${auc.totalBids}`)
                     .addField("Hosted by", `${int.user.tag}`)
@@ -130,7 +127,7 @@ const onInteraction = async ({ int }) => {
             ]
         });
         await auctionManager.deleteOne({ channelId: channel.id });
-        int.editReply({ 
+        await int.reply({ 
             ephemeral: true, 
             content: "Auction was successfully ended!", 
             components: [
@@ -140,11 +137,26 @@ const onInteraction = async ({ int }) => {
                             .setStyle("LINK")
                             .setLabel("Jump to auction")
                             .setEmoji("866635643919794176")
-                            .setURL(`https://discord.com/channels/${auc.guildId}/${auc.channelId}/${sent.id}`)
+                            .setURL(`https://discord.com/channels/${auc.guildId}/${auc.channelId}/${auc.messageId}`)
                     )
             ] 
         });
-
+        if(auc.winner === undefined) return;
+        client.users.fetch(auc.winner)
+            .then(usr => usr.send({
+                content: `You're the winner to the auction for ${auc.item} with the highest bid of ${auc.price}`,
+                components: [
+                    new MessageActionRow()
+                        .addComponents(
+                            new MessageButton()
+                                .setStyle("LINK")
+                                .setLabel("Jump to auction")
+                                .setEmoji("866635643919794176")
+                                .setURL(`https://discord.com/channels/${auc.guildId}/${auc.channelId}/${auc.messageId}`)
+                        )
+                ]
+            }));
+        
     }
 };
 
