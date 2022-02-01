@@ -14,7 +14,7 @@ async function runExp({ voteCallback }) {
     })
 
     // start the server listening for requests
-    app.listen(process.env.PORT || 3000, 
+    app.listen(80, 
     	() => console.log("Server is running...")
     );
 }
