@@ -38,10 +38,10 @@ const onInteraction = async ({ int }) => {
         const channel = int.options.getChannel("channel") !== null ? int.options.getChannel("channel") : int.channel;
         await int.deferReply();
         let auc = await auctionManager.find({ channelId: channel.id }).exec();
-        if (auc[0] !== undefined) return int.reply({ ephemeral: true, content: "There is already an active auction in this channel!" });
+        if (auc[0] !== undefined) return int.editReply({ ephemeral: true, content: "There is already an active auction in this channel!" });
         const bid = int.options.getInteger("startingprice");
         const itm = int.options.getString("item");
-        int.reply({ ephemeral: true, content: "Auction was started!" });
+        int.editReply({ ephemeral: true, content: "Auction was started!" });
         const sent = await channel.send({
             embeds: [
                 new MessageEmbed()
@@ -85,7 +85,7 @@ const onInteraction = async ({ int }) => {
                     .setURL(`https://discord.com/channels/${auc.guildId}/${auc.channelId}/${auc.messageId}`)
             );
         await auctionManager.updateOne({ channelId: int.channel.id }, { winner: int.user.id, price: bid, totalBids: auc.totalBids + 1 });
-        int.reply({
+        int.editReply({
             embeds: [
                 new MessageEmbed()
                     .setTitle("New bid!")
@@ -130,7 +130,7 @@ const onInteraction = async ({ int }) => {
             ]
         });
         await auctionManager.deleteOne({ channelId: channel.id });
-        int.reply({ 
+        int.editReply({ 
             ephemeral: true, 
             content: "Auction was successfully ended!", 
             components: [
