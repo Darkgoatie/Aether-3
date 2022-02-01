@@ -8,7 +8,7 @@ Please do not clone the bot Aether using the source code. The source code is onl
 Aether used to had way more features in Aether V2 (Discord.js v12). Since I just started updating to Discord.js v13, not all of the commands are avaliable right now. But no worries! I've got some plans on making the commands on Aether V3.
 
 ### These are the current planned features right now: 
-- [ ] Auctions
+- [x] Auctions
 - [x] Giveaways
 - [ ] Lotteries
 - [ ] Moderation Commands
