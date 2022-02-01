@@ -42,6 +42,7 @@ const onInteraction = async ({ int }) => {
             content: createBaseEmbed()
                 .addField("User", "Subcommands: \n/user info <User> - Displays someone's user info \n/user roles <User> - Displys someone's roles in current guild (with IDs) ")
                 .addField("Giveaway", "Subcommands: \n/giveaway start <Options> - Starts a giveaway \n/giveaway end <Options> - Ends a giveaway\n/giveaway reroll <Options> - Rerolls a giveaway that has already ended.\n/giveaway setemoji <EmojiName> - Sets a new default giveaway emoji for current server.")
+                .addField("Invite", "/invite - Sends invite links of the bot and the support server")
                 .setFooter({ iconURL: process.env.iconURL, text: "Page 1/3 | Thank you for using Aether!" }),
         },
         {
