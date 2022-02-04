@@ -1,20 +1,23 @@
 const { mongoose } = require("./mongoose");
 
-const gConfSchema = new mongoose.Schema({
-    guildId: String, 
+const gConfSchema = new mongoose.Schema(
+  {
+    guildId: String,
     vouchSettings: {
-        channelId: String,
-        bannedRoles: [String]
+      logChannel: String,
+      cooldown: Number,
     },
     giveawaySettings: {
-        managerRoles: [String],
-        emoji: String,
-        bypassRoles: [String]
+      managerRoles: [String],
+      emoji: String,
+      bypassRoles: [String],
     },
     auctionSettings: {
-        managerRoles: [String]
-    }
-}, { id: false });  
+      managerRoles: [String],
+    },
+  },
+  { id: false }
+);
 
 const gConfModel = mongoose.model("guildConfig", gConfSchema);
 
