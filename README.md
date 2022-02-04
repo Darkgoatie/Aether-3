@@ -10,6 +10,7 @@ Aether used to had way more features in Aether V2 (Discord.js v12). Since I just
 ### These are the current planned features right now: 
 - [x] Auctions
 - [x] Giveaways
+- [x] Vouches
 - [ ] Lotteries
 - [ ] Moderation Commands
 
