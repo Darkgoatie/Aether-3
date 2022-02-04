@@ -121,31 +121,23 @@ const onInteraction = async ({ int }) => {
                 text: "Thank you for using Aether!",
               })
               .setDescription(
-                `Is not an automation +1
-                                Account older than:
-                                120 days: ${
-                                  Date.now() - user.createdAt >
-                                  1000 * 60 * 60 * 24 * 120
-                                    ? "+1"
-                                    : "+0"
-                                }
-                                240 days: ${
-                                  Date.now() - user.createdAt >
-                                  1000 * 60 * 60 * 24 * 240
-                                    ? "+1"
-                                    : "+0"
-                                }
-                                360 days: ${
-                                  Date.now() - user.createdAt >
-                                  1000 * 60 * 60 * 24 * 360
-                                    ? "+1"
-                                    : "+0"
-                                }
-                                Profile Picture is not default: ${
-                                  user.avatarURL() !== null ? "+1" : "+0"
-                                }
-                                --------------------------
-                                Total Security Score: ${safetyLVL + 1}/5
+                `Is not an automation +1 \nAccount older than:\n120 days: ${
+                  Date.now() - user.createdAt > 1000 * 60 * 60 * 24 * 120
+                    ? "+1"
+                    : "+0"
+                }\n240 days: ${
+                  Date.now() - user.createdAt > 1000 * 60 * 60 * 24 * 240
+                    ? "+1"
+                    : "+0"
+                }\n360 days: ${
+                  Date.now() - user.createdAt > 1000 * 60 * 60 * 24 * 360
+                    ? "+1"
+                    : "+0"
+                }\nProfile Picture is not default: ${
+                  user.avatarURL() !== null ? "+1" : "+0"
+                }\n--------------------------\nTotal Security Score: ${
+                  safetyLVL + 1
+                }/5
                                 `
               )
               .setThumbnail(user.displayAvatarURL())
