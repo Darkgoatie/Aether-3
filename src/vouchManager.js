@@ -7,6 +7,6 @@ const vouchSchema = new mongoose.Schema({
   lastVouch: Number,
 });
 
-const vouchModel = mongoose.model("votes", vouchSchema);
+const vouchModel = mongoose.model("vouches", vouchSchema);
 
 module.exports = vouchModel;
