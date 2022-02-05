@@ -57,6 +57,18 @@ const builder = new SlashCommandBuilder()
   )
   .addSubcommand(
     new SlashCommandSubcommandBuilder()
+      .setName("setprice")
+      .setDescription("Re-sets the auction price on current channel.")
+      .addIntegerOption((opt) =>
+        opt
+          .setName("amount")
+          .setDescription("The amount to set")
+          .setRequired(true)
+          .setMinValue(0)
+      )
+  )
+  .addSubcommand(
+    new SlashCommandSubcommandBuilder()
       .setName("end")
       .setDescription("Ends the auction of a channel.")
       .addChannelOption((opt) =>
@@ -318,6 +330,41 @@ const onInteraction = async ({ int, client }) => {
             messageId: smsg.id,
           },
         },
+      }
+    );
+  } else if (int.options.getSubcommand() === "setprice") {
+    const auc = (
+      await auctionManager.find({ channelId: int.channel.id }).exec()
+    )[0];
+    if (auc === undefined)
+      return int.reply({
+        ephemeral: true,
+        content: "Couldn't find any active auctions in this channel!",
+      });
+    if (
+      auc.hostedBy !== int.user.id &&
+      !int.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
+    )
+      return int.reply({
+        ephemeral: true,
+        content:
+          "You should either have started the auction, or should have manage guild permissions to edit it!",
+      });
+    const amount = int.options.getInteger("amount");
+
+    await int.reply({
+      embeds: [
+        new MessageEmbed()
+          .setTitle("Auction price re-set!")
+          .addField("New Price", `${amount}`),
+      ],
+    });
+    await auctionManager.updateOne(
+      {
+        channelId: int.channel.id,
+      },
+      {
+        price: amount,
       }
     );
   }
