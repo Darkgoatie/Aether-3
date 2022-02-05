@@ -61,7 +61,11 @@ const onInteraction = async ({ int }) => {
       content: createBaseEmbed()
         .addField(
           "Auction",
-          "Subcommands: \n/auction start <Options> - Starts an auction in the current/given channel\n/auction bid <Amount> - Bids on the auction of the current channel\n/auction end <Channel> - Ends the auction of the current/given channel"
+          "Subcommands: \n/auction start <Options> - Starts an auction in the current/given channel\n/auction bid <Amount> - Bids on the auction of the current channel\n/auction end <Channel> - Ends the auction of the current/given channel\n/auction setprice <Options> - Sets a new price to an auction\n/auction autoend <Options> - Sets an end timer for current channel's auction"
+        )
+        .addField(
+          "Vouch",
+          "Subcommands: \n/vouch give <Options> - (Same as old +1) Vouches someone\n/vouch check <Options> - Check the vouches of someone\n/vouch set <Options> - Set the vouches of someone\n/vouch config <Options> - Configure the vouch settings of this guild"
         )
         .setFooter({
           iconURL: process.env.iconURL,
