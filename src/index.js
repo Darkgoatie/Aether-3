@@ -98,10 +98,8 @@ async function main() {
   });
 
   let autoends = await aucMngr.find({ "autoEndSettings.autoEnd": true }).exec();
-
+  console.log(`Auto end auctions: ${autoends.length}`);
   setInterval(async () => {
-    console.log("loop ran!");
-    console.log(autoends);
     autoends.forEach(async (auc) => {
       try {
         const msg = await (
@@ -214,3 +212,6 @@ async function main() {
 }
 
 main();
+
+// Create err handler
+process.on("uncaughtException", (err) => console.log(err));
