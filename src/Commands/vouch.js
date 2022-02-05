@@ -98,7 +98,7 @@ const builder = new SlashCommandBuilder()
 
 const onInteraction = async ({ int, client }) => {
   if (
-    (await guildManager.find({ guildId: int.guild.id }).exec()) === undefined
+    (await guildManager.find({ guildId: int.guild.id }).exec())[0] === undefined
   ) {
     await guildManager.create({ guildId: int.guild.id });
   }
