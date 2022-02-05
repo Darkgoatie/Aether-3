@@ -11,6 +11,7 @@ const {
 } = require("discord.js");
 const auctionManager = require("../auctionManager.js");
 const ms = require("ms");
+const { parse } = require("dotenv");
 
 const name = "auction";
 const description = "Base Auction Command";
@@ -65,6 +66,17 @@ const builder = new SlashCommandBuilder()
           .setDescription(
             "The channel to end the giveaway of. if left blank, current channel will be used."
           )
+      )
+  )
+  .addSubcommand(
+    new SlashCommandSubcommandBuilder()
+      .setName("autoend")
+      .setDescription("Sets a time for the auction to end automatically")
+      .addStringOption((opt) =>
+        opt
+          .setName("time")
+          .setDescription("The time to auto end the auction at. Ex: 1h, 1d12h")
+          .setRequired(true)
       )
   );
 
@@ -168,7 +180,7 @@ const onInteraction = async ({ int, client }) => {
       ],
       components: [row],
     });
-  } else if (int.options.getSubcommand()) {
+  } else if (int.options.getSubcommand() === "end") {
     const channel =
       int.options.getChannel("channel") !== null
         ? int.options.getChannel("channel")
@@ -250,6 +262,63 @@ const onInteraction = async ({ int, client }) => {
           ),
         ],
       })
+    );
+  } else if (int.options.getSubcommand() === "autoend") {
+    const time = ms(int.options.getString("time"));
+    if (time === undefined)
+      return int.reply({
+        ephemeral: true,
+        content: "Not a valid amt of time!",
+      });
+    if (time > ms("1w"))
+      return int.reply({
+        ephemeral: true,
+        content: "Time can't be longer than a week!",
+      });
+    const auc = (
+      await auctionManager.find({ channelId: int.channel.id }).exec()
+    )[0];
+    if (auc === undefined)
+      return int.reply({
+        ephemeral: true,
+        content: "Couldn't find any active auctions in this channel!",
+      });
+    if (
+      auc.hostedBy !== int.user.id &&
+      !int.member.permissions.has(Permissions.FLAGS.MANAGE_GUILD)
+    )
+      return int.reply({
+        ephemeral: true,
+        content:
+          "You should either have started the auction, or should have manage guild permissions to end it!",
+      });
+
+    await int.reply({
+      content: "A timer was started!",
+      ephemeral: true,
+    });
+    const smsg = await int.channel.send({
+      embeds: [
+        new MessageEmbed()
+          .setTitle("Auction end timer")
+          .setDescription(`Ends in ${ms(time)}`)
+          .setColor("RANDOM"),
+      ],
+    });
+
+    await auctionManager.updateOne(
+      {
+        channelId: int.channel.id,
+      },
+      {
+        autoEndSettings: {
+          autoEnd: true,
+          endAt: Date.now() + time,
+          timer: {
+            messageId: smsg.id,
+          },
+        },
+      }
     );
   }
 };

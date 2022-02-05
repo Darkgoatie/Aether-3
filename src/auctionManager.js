@@ -13,6 +13,9 @@ const aucSchema = new mongoose.Schema({
   autoEndSettings: {
     autoEnd: Boolean,
     endAt: Number,
+    timer: {
+      messageId: String,
+    },
   },
 });
 
