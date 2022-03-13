@@ -35,6 +35,9 @@ const builder = new SlashCommandBuilder()
 					.setDescription('The channel to put the giveaway in')
 					.addChannelType(ChannelType.GuildText)
 			)
+			.addRoleOption((opt) =>
+				opt.setName('mention').setDescription('The role to ping after starting the giveaway')
+			)
 	)
 	.addSubcommand(
 		new SlashCommandSubcommandBuilder()
@@ -102,6 +105,7 @@ const onInteraction = async ({ int, client }) => {
 		const gwLength = parseInt(ms(int.options.getString('time')));
 		const winners = int.options.getInteger('winners') ? parseInt(int.options.getInteger('winners')) : 1;
 		const prize = int.options.getString('prize');
+		const roleToMention = int.options.getRole('mention');
 		const giveawayChannel = int.options.getChannel('channel');
 
 		if (isNaN(gwLength))
@@ -134,6 +138,11 @@ const onInteraction = async ({ int, client }) => {
 				: int.channel.id}> !`,
 			ephemeral: true
 		});
+		if (roleToMention !== null) {
+			await int.channel.send({
+				content: `Ping: <@&${roleToMention.id}>`
+			});
+		}
 	} else if (int.options.getSubcommand() === 'end') {
 		let messageId = int.options.getString('id');
 		messageId = messageId.includes('-') ? messageId.split('-')[1] : messageId;
