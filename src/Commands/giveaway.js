@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, SlashCommandSubcommandBuilder } = require('@discordjs/builders');
 const { ChannelType } = require('discord-api-types/v9');
 const { Permissions, MessageEmbed } = require('discord.js');
-const gConfModel = require('../guildManager.js');
 const ms = require('ms');
 
 const name = 'giveaway';
@@ -80,6 +79,7 @@ const builder = new SlashCommandBuilder()
 	);
 
 const onInteraction = async ({ int, client }) => {
+	const gConfModel = require('../guildManager.js');
 	const thisGuildConf = (await gConfModel.find({ guildId: int.guild.id }).exec())[0];
 
 	if (int.options.getSubcommand() === 'start') {
