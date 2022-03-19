@@ -246,7 +246,7 @@ const onInteraction = async ({ int, client }) => {
 		);
 	} else if (int.options.getSubcommand() === 'autoend') {
 		const time = ms(int.options.getString('time'));
-		if (time === undefined)
+		if (typeof time != 'number')
 			return int.reply({
 				ephemeral: true,
 				content: 'Not a valid amt of time!'
