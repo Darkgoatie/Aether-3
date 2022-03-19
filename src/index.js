@@ -65,9 +65,8 @@ async function main() {
 		}
 	});
 
-	let autoends = await aucMngr.find({ 'autoEndSettings.autoEnd': true }).exec();
-	console.log(`Auto end auctions: ${autoends.length}`);
 	setInterval(async () => {
+		let autoends = await aucMngr.find({ 'autoEndSettings.autoEnd': true }).exec();
 		autoends.forEach(async (auc) => {
 			/*
 			if ((await client.channels.fetch(auc.channelId)) == undefined)
@@ -106,15 +105,13 @@ async function main() {
 					await aucMngr.deleteOne({ channelId: auc.channelId });
 					autoends = await aucMngr.find({ 'autoEndSettings.autoEnd': true }).exec();
 				} else {
-					msg.edit({
+					await msg.edit({
 						embeds: [
 							new MessageEmbed()
 								.setTitle('Auction end timer')
 								.setDescription(`Ends in ${ms(auc.autoEndSettings.endAt - Date.now())}`)
 						]
 					});
-
-					autoends = await aucMngr.find({ 'autoEndSettings.autoEnd': true }).exec();
 				}
 			} catch (error) {
 				((str) => {
