@@ -2,3 +2,4 @@ src/config.json
 node_modules
 .env
 command-manager
+.DS_Store
