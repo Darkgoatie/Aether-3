@@ -1,11 +1,9 @@
 async function main() {
-	const { Client, Intents, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-	const { runExp } = require('./express.js');
+	const { Client, Intents, MessageEmbed } = require('discord.js');
 	const { readdirSync } = require('fs');
 	const path = require('path');
 	const ManagerWithOwnDatabase = require('./giveawayManager.js');
 	const ms = require('ms');
-	const voteModel = require('./voteManager.js');
 	const aucMngr = require('./auctionManager');
 	const client = new Client({
 		intents: [ Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS ]
@@ -122,51 +120,6 @@ async function main() {
 	}, 20e3);
 
 	client.login(process.env.token);
-	runExp({
-		client,
-		voteCallback: async (vote) => {
-			const u = await client.users.fetch(vote.user);
-			if (u === null || u === undefined) return;
-			let thisUser = (await voteModel.find({ userId: vote.user }).exec())[0];
-			if (thisUser === undefined) {
-				await voteModel.create({
-					userId: vote.user,
-					voteCount: 0,
-					lastVote: Date.now()
-				});
-			} else {
-				const vCount = thisUser.voteCount + 1;
-				const lVote = Date.now();
-				await voteModel.updateOne(
-					{ userId: vote.user },
-					{
-						lastVote: lVote,
-						voteCount: vCount
-					}
-				);
-			}
-
-			await u.send({
-				embeds: [
-					new MessageEmbed()
-						.setTitle('Vote Recieved!')
-						.setColor('RANDOM')
-						.setDescription(
-							'Your vote for Aether on top.gg has been recieved! Thanks for voting us! You can vote once again in 12 hours using the link below!'
-						)
-				],
-				components: [
-					new MessageActionRow().addComponents(
-						new MessageButton()
-							.setLabel('Vote again!')
-							.setStyle('LINK')
-							.setURL('https://aether.vercel.app/vote')
-							.setEmoji('937608329734291496')
-					)
-				]
-			});
-		}
-	});
 }
 
 main();
