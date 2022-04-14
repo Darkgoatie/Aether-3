@@ -5,9 +5,9 @@ require("dotenv").config();
 mongoose.connect(process.env.URI);
 const db = mongoose.connection;
 db.on("error", onError);
-db.once('open', onceOpen);
+db.once("open", onceOpen);
 
 module.exports = {
-    db,
-    mongoose
+  db,
+  mongoose,
 };
