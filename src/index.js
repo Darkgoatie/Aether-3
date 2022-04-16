@@ -1,17 +1,20 @@
+const getClientData = require("./utils/getClientData");
+
 async function main() {
-  const { Client, Intents, MessageEmbed } = require("discord.js");
+  const { Client, Intents } = require("discord.js");
   const { readdirSync } = require("fs");
   const path = require("path");
   const ms = require("ms");
-  const startManager = require("./autoEndAuctions");
+  const startManager = require("./utils/autoEndAuctions");
 
+  const clientData = await getClientData();
   // Create discord client
   const client = new Client({
     intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGE_REACTIONS],
   });
 
   // Create giveaway manager
-  const ManagerWithOwnDatabase = require("./giveawayManager.js");
+  const ManagerWithOwnDatabase = require("./managers/giveawayManager.js");
   client.giveawaysManager = new ManagerWithOwnDatabase(client, {
     endedGiveawaysLifetime: ms("7d"),
     forceUpdateEvery: ms("10s"),
@@ -22,6 +25,8 @@ async function main() {
       reaction: "866637037607845929",
     },
   });
+
+  client.data = clientData;
 
   // Configure commands
   const commandFiles = readdirSync(path.join(__dirname, "Commands"));
@@ -97,9 +102,9 @@ async function main() {
     }
   });
 
-  startManager();
+  startManager(client);
 
-  client.login(process.env.token);
+  client.login(client.data.token);
 }
 
 main();

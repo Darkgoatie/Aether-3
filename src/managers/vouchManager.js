@@ -1,4 +1,4 @@
-const { mongoose } = require("./mongoose");
+const { mongoose } = require("../mongoose");
 
 const vouchSchema = new mongoose.Schema({
   guildId: String,

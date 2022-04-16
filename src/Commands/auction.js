@@ -98,7 +98,7 @@ const builder = new SlashCommandBuilder()
   );
 
 const onInteraction = async ({ int, client }) => {
-  const auctionManager = require("../auctionManager.js");
+  const auctionManager = require("../managers/auctionManager.js");
   require("dotenv").config();
   if (int.options.getSubcommand() === "start") {
     if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))

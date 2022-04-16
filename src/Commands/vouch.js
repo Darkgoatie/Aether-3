@@ -3,12 +3,7 @@ const {
   SlashCommandSubcommandBuilder,
 } = require("@discordjs/builders");
 const { ChannelType } = require("discord-api-types/v9");
-const {
-  Permissions,
-  MessageEmbed,
-  MessageActionRow,
-  MessageButton,
-} = require("discord.js");
+const { Permissions, MessageEmbed } = require("discord.js");
 
 const name = "vouch";
 const description = "Base Vouch command";
@@ -95,8 +90,8 @@ const builder = new SlashCommandBuilder()
   );
 
 const onInteraction = async ({ int, client }) => {
-  const vouchManager = require("../vouchManager.js");
-  const guildManager = require("../guildManager");
+  const vouchManager = require("../managers/vouchManager.js");
+  const guildManager = require("../managers/guildManager");
   if (
     (await guildManager.find({ guildId: int.guild.id }).exec())[0] === undefined
   ) {

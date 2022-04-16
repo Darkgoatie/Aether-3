@@ -1,17 +1,26 @@
+/**
+ *
+ * @param {Discord.Client} client
+ */
 const startManager = (client) => {
-  const aucMngr = require("./auctionManager");
+  const { MessageEmbed } = require("discord.js");
+  const ms = require("ms");
+  const aucMngr = require("../managers/auctionManager");
   setInterval(async () => {
     let autoends = await aucMngr
       .find({ "autoEndSettings.autoEnd": true })
       .exec();
+
     autoends.forEach(async (auc) => {
       try {
-        const msg = await (
-          await client.channels.fetch(auc.channelId)
-        ).messages.fetch(auc.autoEndSettings.timer.messageId);
-        if (msg === undefined) return;
+        const aucChannel = await client.channels.fetch(auc.channelId);
+        if (aucChannel == undefined) return;
+        const msg = await aucChannel.messages.fetch(
+          auc.autoEndSettings.timer.messageId
+        );
+        if (msg == undefined) return;
         if (auc.autoEndSettings.endAt < Date.now()) {
-          msg.edit({
+          await msg.edit({
             embeds: [
               new MessageEmbed()
                 .setTitle("Auction end timer")
@@ -19,12 +28,11 @@ const startManager = (client) => {
                 .setColor("RED"),
             ],
           });
-          const cuhan = await client.channels.fetch(auc.channelId);
-          await cuhan.send({
+          await aucChannel.send({
             embeds: [
               new MessageEmbed()
                 .setAuthor({
-                  iconURL: process.env.iconURL,
+                  iconURL: client.data.iconURL,
                   name: `Auction hosted using Aether`,
                   url: "https://aether.vercel.app/invite",
                 })
@@ -43,10 +51,10 @@ const startManager = (client) => {
             ],
           });
           await aucMngr.deleteOne({ channelId: auc.channelId });
+        } else {
           autoends = await aucMngr
             .find({ "autoEndSettings.autoEnd": true })
             .exec();
-        } else {
           await msg.edit({
             embeds: [
               new MessageEmbed()
@@ -57,8 +65,8 @@ const startManager = (client) => {
             ],
           });
         }
-      } catch (error) {
-        (() => {})(error);
+      } catch {
+        (err) => err;
       }
     });
   }, 20e3);

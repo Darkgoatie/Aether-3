@@ -105,7 +105,7 @@ const builder = new SlashCommandBuilder()
   );
 
 const onInteraction = async ({ int, client }) => {
-  const gConfModel = require("../guildManager.js");
+  const gConfModel = require("../managers/guildManager.js");
   const thisGuildConf = (
     await gConfModel.find({ guildId: int.guild.id }).exec()
   )[0];
