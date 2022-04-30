@@ -1,4 +1,5 @@
 const { getClientData } = require("./utils/getClientData");
+const { setStatus } = require("./utils/setStatus");
 
 async function main() {
   const { Client, Intents } = require("discord.js");
@@ -103,6 +104,7 @@ async function main() {
   });
 
   startManager(client);
+  setStatus(client, "Your fav auction bot!");
 
   client.login(client.data.token);
 }
