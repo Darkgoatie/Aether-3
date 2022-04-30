@@ -104,7 +104,7 @@ async function main() {
   });
 
   startManager(client);
-  setStatus(client, "Your fav auction bot!");
+  //setStatus(client, "Your fav auction bot!");
 
   client.login(client.data.token);
 }
