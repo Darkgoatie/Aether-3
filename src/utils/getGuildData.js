@@ -9,3 +9,5 @@ const getGuildData = async (guildId) => {
     guildId,
   });
 };
+
+module.exports = { getGuildData };

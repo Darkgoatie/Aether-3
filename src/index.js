@@ -1,4 +1,4 @@
-const getClientData = require("./utils/getClientData");
+const { getClientData } = require("./utils/getClientData");
 
 async function main() {
   const { Client, Intents } = require("discord.js");

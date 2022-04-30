@@ -5,4 +5,4 @@ async function getClientData() {
   return data;
 }
 
-module.exports = getClientData;
+module.exports = { getClientData };

@@ -1,5 +1,5 @@
 const onGuildDelete = async (guild) => {
-  const gConfModel = require("../../../guildManager.js");
+  const gConfModel = require("../../../managers/guildManager");
   await gConfModel.deleteOne({
     guildId: guild.id,
   });
