@@ -1,12 +1,12 @@
-const { getClientData } = require("./utils/getClientData");
-const { setStatus } = require("./utils/setStatus");
+const { updateAll } = require("./utils/updateGuilds");
 
 async function main() {
   const { Client, Intents } = require("discord.js");
   const { readdirSync } = require("fs");
   const path = require("path");
   const ms = require("ms");
-  const startManager = require("./utils/autoEndAuctions");
+  const { startManager } = require("./utils/autoEndAuctions");
+  const { getClientData } = require("./utils/getClientData");
 
   const clientData = await getClientData();
   // Create discord client
@@ -104,7 +104,7 @@ async function main() {
   });
 
   startManager(client);
-  //setStatus(client, "Your fav auction bot!");
+  updateAll(client);
 
   client.login(client.data.token);
 }

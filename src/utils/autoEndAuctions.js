@@ -72,4 +72,4 @@ const startManager = (client) => {
   }, 20e3);
 };
 
-module.exports = startManager;
+module.exports = { startManager };

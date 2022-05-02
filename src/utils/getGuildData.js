@@ -8,6 +8,7 @@ const getGuildData = async (guildId) => {
   const guild = await gConfModel.findOne({
     guildId,
   });
+  return guild;
 };
 
 module.exports = { getGuildData };
