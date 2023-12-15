@@ -1,5 +1,5 @@
 const onError = (err) => {
-  console.error(err);
+    console.error(err);
 };
 
-module.exports = { onError };
+module.exports = {onError};

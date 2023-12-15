@@ -5,10 +5,10 @@ const gConfModel = require("../managers/guildManager");
  * @param {string} guildId
  */
 const getGuildData = async (guildId) => {
-  const guild = await gConfModel.findOne({
-    guildId,
-  });
-  return guild;
+    const guild = await gConfModel.findOne({
+        guildId,
+    });
+    return guild;
 };
 
-module.exports = { getGuildData };
+module.exports = {getGuildData};

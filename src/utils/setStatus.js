@@ -4,7 +4,7 @@
  * @param {string} status
  */
 const setStatus = (client, status) => {
-  client.user.setActivity(status, { type: "PLAYING" });
+    client.user.setActivity(status, {type: "PLAYING"});
 };
 
-module.exports = { setStatus };
+module.exports = {setStatus};
