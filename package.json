@@ -4,9 +4,9 @@
   "description": "Aether, the discord bot",
   "main": "src/index.js",
   "scripts": {
-    "deploy": "node command-manager/deploy-commands.js",
+    "deploy": "node command-manager/deploy.js",
     "start": "node src/index.js",
-    "clear": "node command-manager/clear-commands.js"
+    "clear": "node command-manager/clear.js"
   },
   "author": "Darkgoatie",
   "license": "MIT",
@@ -35,7 +35,7 @@
     "url": "https://github.com/Darkgoatie/Aether-3.git"
   },
   "engines": {
-    "node": ">=16.6"
+    "node": ">=20.10"
   },
   "engineStrict": true
 }
