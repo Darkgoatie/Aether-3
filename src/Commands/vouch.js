@@ -108,8 +108,8 @@ const onInteraction = async ({ int, client }) => {
           content: "You need manage guild permissions to use this command!",
           ephemeral: true,
         });
-      const channel = int.options.getChannel("logchannel");
-      const cooldown = int.options.getInteger("cooldown") * 6e4;
+      channel = int.options.getChannel("logchannel");
+      cooldown = int.options.getInteger("cooldown") * 6e4;
       await guildManager.updateOne(
         {
           guildId: int.guild.id,
@@ -187,7 +187,7 @@ const onInteraction = async ({ int, client }) => {
       });
 
       if (vouchSettings.logChannel !== undefined) {
-        const logChan = await client.channels.fetch(vouchSettings.logChannel);
+        logChan = await client.channels.fetch(vouchSettings.logChannel);
         if (logChan !== undefined) {
           logChan.send({
             embeds: [
@@ -249,7 +249,7 @@ const onInteraction = async ({ int, client }) => {
       }
       break;
     case "check":
-      const user =
+      user =
         int.options.getUser("user") !== null
           ? int.options.getUser("user")
           : int.user;
@@ -281,9 +281,9 @@ const onInteraction = async ({ int, client }) => {
           content: "You need manage guild permissions to use this command!",
           ephemeral: true,
         });
-      const amt = int.options.getInteger("amount");
-      const reason = int.options.getString("reason");
-      const toVouch = int.options.getUser("user");
+      amt = int.options.getInteger("amount");
+      reason = int.options.getString("reason");
+      toVouch = int.options.getUser("user");
 
       if (vouches.find(v => v.userId === toVouch.id) === undefined) {
         await vouchManager.create({
@@ -311,7 +311,7 @@ const onInteraction = async ({ int, client }) => {
       });
 
       if (vouchSettings.logChannel !== undefined) {
-        const logChan = await client.channels.fetch(vouchSettings.logChannel);
+        logChan = await client.channels.fetch(vouchSettings.logChannel);
         if (logChan !== undefined) {
           logChan.send({
             embeds: [

@@ -139,13 +139,13 @@ const onInteraction = async ({ int, client }) => {
           ephemeral: true,
           content: "You need manage messages permissions to use this command!",
         });
-      const gwLength = parseInt(ms(int.options.getString("time")));
-      const winners = int.options.getInteger("winners")
+      gwLength = parseInt(ms(int.options.getString("time")));
+      winners = int.options.getInteger("winners")
         ? parseInt(int.options.getInteger("winners"))
         : 1;
-      const prize = int.options.getString("prize");
-      const roleToMention = int.options.getRole("mention");
-      const giveawayChannel = int.options.getChannel("channel");
+      prize = int.options.getString("prize");
+      roleToMention = int.options.getRole("mention");
+      giveawayChannel = int.options.getChannel("channel");
 
       if (isNaN(gwLength))
         return int.reply({
@@ -236,9 +236,9 @@ const onInteraction = async ({ int, client }) => {
       break;
     case "list":
       gws = client.giveawaysManager.giveaways;
-      const ftrChannel = int.options.getChannel("channel");
-      const ftrPrize = int.options.getString("prize");
-      const ftrEnded = int.options.getBoolean("ended");
+      ftrChannel = int.options.getChannel("channel");
+      ftrPrize = int.options.getString("prize");
+      ftrEnded = int.options.getBoolean("ended");
       gws = gws.filter(gw => gw.guildId === int.guild.id);
       if (ftrChannel !== null)
         gws = gws.filter(gw => gw.channelId == ftrChannel.id);
@@ -256,13 +256,13 @@ const onInteraction = async ({ int, client }) => {
       });
 
       // This part was the hardest code i ever wrote :(
-      const embeds = [];
+      embeds = [];
       for (
         let embedCount = 0;
         embedCount < 10 && gws.length > 0;
         embedCount++
       ) {
-        const emb = new MessageEmbed()
+        emb = new MessageEmbed()
           .setTitle("Giveaways list")
           .setFooter({ text: `Page ${embedCount}` });
 
@@ -271,7 +271,7 @@ const onInteraction = async ({ int, client }) => {
           fieldCount < 25 && gws.length > 0;
           fieldCount
         ) {
-          const data = gws.shift();
+          data = gws.shift();
           emb.addField(data.nm, data.val, true);
         }
         embeds.push(emb);
@@ -287,8 +287,8 @@ const onInteraction = async ({ int, client }) => {
           content: "You need manage guild permissions to use this command!",
         });
 
-      const emojiName = int.options.getString("emoji");
-      const emoji = int.guild.emojis.cache.find(emj => emj.name === emojiName);
+      emojiName = int.options.getString("emoji");
+      emoji = int.guild.emojis.cache.find(emj => emj.name === emojiName);
 
       if (typeof emoji === "undefined" || emoji === null)
         return int.reply({

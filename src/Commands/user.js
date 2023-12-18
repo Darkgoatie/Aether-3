@@ -74,10 +74,10 @@ const onInteraction = async ({ int, client }) => {
       });
       break;
     case "roles":
-      const user = int.options.getUser("user");
-      const mem = await int.guild.members.fetch(user.id);
+      user = int.options.getUser("user");
+      mem = await int.guild.members.fetch(user.id);
       if (!mem) return;
-      const roles = [];
+      roles = [];
       mem.roles.cache.forEach(rl => {
         rl.name !== "@everyone"
           ? roles.push(`<@&${rl.id}> - ${rl.id}`)
