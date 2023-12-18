@@ -1,12 +1,10 @@
 const { mongoose } = require("../mongoose");
 
-const schema = new mongoose.Schema({
+const cliSchema = new mongoose.Schema({
   iconURL: String,
-  URI: String,
   id: String,
   token: String,
 });
 
-const dataModel = mongoose.model("clientData", schema);
-
+const dataModel = mongoose.model("clientdatas", cliSchema);
 module.exports = dataModel;
