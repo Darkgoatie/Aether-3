@@ -20,20 +20,20 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("start")
       .setDescription("Starts an auction in a channel.")
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("startingprice")
           .setDescription("The Starting price of the auction")
           .setMinValue(1)
           .setRequired(true)
       )
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("item")
           .setDescription("The Item to be auctioned")
           .setRequired(true)
       )
-      .addChannelOption(opt =>
+      .addChannelOption((opt) =>
         opt
           .addChannelType(ChannelType.GuildText)
           .setName("channel")
@@ -46,13 +46,13 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("bid")
       .setDescription("Bid for the auction in the current channel.")
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("amount")
           .setDescription("The amount to be offered to the auction")
           .setRequired(true)
       )
-      .addBooleanOption(opt =>
+      .addBooleanOption((opt) =>
         opt
           .setName("anonymous")
           .setDescription(
@@ -64,7 +64,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("setprice")
       .setDescription("Re-sets the auction price on current channel.")
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("amount")
           .setDescription("The amount to set")
@@ -76,7 +76,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("end")
       .setDescription("Ends the auction of a channel.")
-      .addChannelOption(opt =>
+      .addChannelOption((opt) =>
         opt
           .addChannelType(ChannelType.GuildText)
           .setName("channel")
@@ -89,7 +89,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("autoend")
       .setDescription("Sets a time for the auction to end automatically")
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("time")
           .setDescription("The time to auto end the auction at. Ex: 1h, 1d12h")
@@ -102,12 +102,12 @@ const onInteraction = async ({ int, client }) => {
   require("dotenv").config();
   const subcommand = int.options.getSubcommand();
 
-  const findActiveAuction = async channelId => {
+  const findActiveAuction = async (channelId) => {
     const auc = (await auctionManager.find({ channelId }).exec())[0];
     return auc;
   };
 
-  const replyEphemeral = content => {
+  const replyEphemeral = (content) => {
     int.reply({ ephemeral: true, content });
   };
 
@@ -139,7 +139,7 @@ const onInteraction = async ({ int, client }) => {
             .setAuthor({
               iconURL: process.env.iconURL,
               name: `Auction hosted using Aether`,
-              url: "https://aether.vercel.app/invite",
+              url: "https://discord.com/invite/Vmfe56uMf6",
             })
             .addField("Starting bid", `${bid}`)
             .addField("Item", itm)
@@ -202,7 +202,7 @@ const onInteraction = async ({ int, client }) => {
               .setAuthor({
                 iconURL: process.env.iconURL,
                 name: `Auction hosted using Aether`,
-                url: "https://aether.vercel.app/invite",
+                url: "https://discord.com/invite/Vmfe56uMf6",
               })
               .setThumbnail(
                 int.guild.iconURL() !== null
@@ -230,7 +230,7 @@ const onInteraction = async ({ int, client }) => {
               .setAuthor({
                 iconURL: process.env.iconURL,
                 name: `Auction hosted using Aether`,
-                url: "https://aether.vercel.app/invite",
+                url: "https://discord.com/invite/Vmfe56uMf6",
               })
               .setThumbnail(
                 int.guild.iconURL() !== null
@@ -278,7 +278,7 @@ const onInteraction = async ({ int, client }) => {
             .setAuthor({
               iconURL: process.env.iconURL,
               name: `Auction hosted using Aether`,
-              url: "https://aether.vercel.app/invite",
+              url: "https://discord.com/invite/Vmfe56uMf6",
             })
             .addField(`Sold at (Price)`, `${auc.price}`)
             .addField(
@@ -311,7 +311,7 @@ const onInteraction = async ({ int, client }) => {
         ],
       });
       if (auc.winner === undefined) return;
-      client.users.fetch(auc.winner).then(usr =>
+      client.users.fetch(auc.winner).then((usr) =>
         usr.send({
           content: `You're the winner to the auction for ${auc.item} with the highest bid of ${auc.price}`,
           components: [

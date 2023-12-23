@@ -33,7 +33,7 @@ const onInteraction = ({ int, client }) => {
         new MessageButton()
           .setLabel("Latest announcements")
           .setStyle("LINK")
-          .setURL(`https://aether.vercel.app/support`)
+          .setURL(`https://discord.com/invite/Vmfe56uMf6`)
           .setEmoji("937284368202891295")
       ),
     ],
