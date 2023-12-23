@@ -19,7 +19,7 @@ const onInteraction = async ({ int }) => {
         )
         .addField(
           "Join the support server",
-          "[Click to join!](https://aether.vercel.app/support)"
+          "[Click to join!](https://discord.com/invite/Vmfe56uMf6)"
         ),
     ],
     components: [

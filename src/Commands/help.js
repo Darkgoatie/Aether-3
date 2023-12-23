@@ -29,7 +29,7 @@ const onInteraction = async ({ int }) => {
       .setAuthor({ name: int.user.tag, iconURL: int.user.avatarURL() })
       .setTitle("Help menu")
       .setDescription(
-        "[Invite Aether!](https://aether.vercel.app/invite) / [Join the support server!](https://aether.vercel.app/support)"
+        "[Invite Aether!](https://aether.vercel.app/invite) / [Join the support server!](hhttps://discord.com/invite/Vmfe56uMf6)"
       )
       .setTimestamp(new Date())
       .setColor("RANDOM");
