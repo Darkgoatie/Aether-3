@@ -17,14 +17,14 @@ const builder = new SlashCommandBuilder()
       .setDescription(
         "Configures the vouch manager for current guild. Must be done before using any vouch commands!"
       )
-      .addChannelOption(opt =>
+      .addChannelOption((opt) =>
         opt
           .setName("logchannel")
           .setDescription("The channel to log the vouches in.")
-          .addChannelType(ChannelType.GuildText)
+          .addChannelTypes(ChannelType.GuildText)
           .setRequired(true)
       )
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("cooldown")
           .setDescription(
@@ -41,13 +41,13 @@ const builder = new SlashCommandBuilder()
       .setDescription(
         "Vouches someone, adding +1 to their vouch score in the current guild."
       )
-      .addUserOption(opt =>
+      .addUserOption((opt) =>
         opt
           .setName("user")
           .setDescription("The user to vouch")
           .setRequired(true)
       )
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("reason")
           .setDescription("The reason you're vouching this user for")
@@ -57,7 +57,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("check")
       .setDescription("Checks someone's vouches")
-      .addUserOption(opt =>
+      .addUserOption((opt) =>
         opt
           .setName("user")
           .setDescription(
@@ -69,20 +69,20 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("set")
       .setDescription("Set a user's vouches to a specific amount")
-      .addUserOption(opt =>
+      .addUserOption((opt) =>
         opt
           .setName("user")
           .setDescription("The user to set the vouches of.")
           .setRequired(true)
       )
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("amount")
           .setMinValue(0)
           .setDescription("The vouches to set to this user")
           .setRequired(true)
       )
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("reason")
           .setDescription("The reason you're setting the vouches of this user")
@@ -142,7 +142,7 @@ const onInteraction = async ({ int, client }) => {
     case "give":
       toVouch = int.options.getUser("user");
       reason = int.options.getString("reason");
-      if (!vouches.find(v => v.userId === int.user.id)) {
+      if (!vouches.find((v) => v.userId === int.user.id)) {
         await vouchManager.create({
           userId: int.user.id,
           guildId: int.guild.id,
@@ -161,7 +161,7 @@ const onInteraction = async ({ int, client }) => {
           ? vouchSettings.cooldown
           : 180000;
       if (
-        vouches.find(v => v.userId === int.user.id).lastVouch + cd >
+        vouches.find((v) => v.userId === int.user.id).lastVouch + cd >
         Date.now()
       )
         return int.reply({
@@ -215,7 +215,7 @@ const onInteraction = async ({ int, client }) => {
         }
       }
 
-      if (vouches.find(v => v.userId === int.user.id) === undefined) {
+      if (vouches.find((v) => v.userId === int.user.id) === undefined) {
         await vouchManager.create({
           guildId: int.guild.id,
           userId: int.user.id,
@@ -233,7 +233,7 @@ const onInteraction = async ({ int, client }) => {
         }
       );
 
-      if (vouches.find(v => v.userId === toVouch.id) === undefined) {
+      if (vouches.find((v) => v.userId === toVouch.id) === undefined) {
         await vouchManager.create({
           guildId: int.guild.id,
           userId: toVouch.id,
@@ -244,7 +244,7 @@ const onInteraction = async ({ int, client }) => {
         await vouchManager.updateOne({
           guildId: int.guild.id,
           userId: toVouch.id,
-          vouches: vouches.find(v => v.userId === toVouch.id).vouches + 1,
+          vouches: vouches.find((v) => v.userId === toVouch.id).vouches + 1,
         });
       }
       break;
@@ -253,7 +253,7 @@ const onInteraction = async ({ int, client }) => {
         int.options.getUser("user") !== null
           ? int.options.getUser("user")
           : int.user;
-      let userData = vouches.find(usr => usr.userId === user.id);
+      let userData = vouches.find((usr) => usr.userId === user.id);
       if (userData === undefined) {
         userData = {
           vouches: 0,
@@ -285,7 +285,7 @@ const onInteraction = async ({ int, client }) => {
       reason = int.options.getString("reason");
       toVouch = int.options.getUser("user");
 
-      if (vouches.find(v => v.userId === toVouch.id) === undefined) {
+      if (vouches.find((v) => v.userId === toVouch.id) === undefined) {
         await vouchManager.create({
           guildId: int.guild.id,
           userId: toVouch.id,

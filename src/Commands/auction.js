@@ -11,6 +11,12 @@ const {
 } = require("discord.js");
 const ms = require("ms");
 
+const makeField = (name, val) => {
+  return {
+    name: name,
+    value: val,
+  };
+};
 const name = "auction";
 const description = "Base Auction Command";
 const builder = new SlashCommandBuilder()
@@ -35,7 +41,7 @@ const builder = new SlashCommandBuilder()
       )
       .addChannelOption((opt) =>
         opt
-          .addChannelType(ChannelType.GuildText)
+          .addChannelTypes(ChannelType.GuildText)
           .setName("channel")
           .setDescription(
             "The Channel to start the auction in. if left blank, auction will be started in current channel"
@@ -78,7 +84,7 @@ const builder = new SlashCommandBuilder()
       .setDescription("Ends the auction of a channel.")
       .addChannelOption((opt) =>
         opt
-          .addChannelType(ChannelType.GuildText)
+          .addChannelTypes(ChannelType.GuildText)
           .setName("channel")
           .setDescription(
             "The channel to end the giveaway of. if left blank, current channel will be used."
@@ -141,9 +147,14 @@ const onInteraction = async ({ int, client }) => {
               name: `Auction hosted using Aether`,
               url: "https://discord.com/invite/Vmfe56uMf6",
             })
-            .addField("Starting bid", `${bid}`)
-            .addField("Item", itm)
-            .addField("Hosted by", int.user.tag)
+            .addFields([
+              {
+                name: "Starting bid",
+                value: `${bid}`,
+              },
+              { name: "Item", value: itm },
+              { name: "Hosted by", value: int.user.tag },
+            ])
             .setColor("RANDOM"),
         ],
       });
@@ -213,7 +224,7 @@ const onInteraction = async ({ int, client }) => {
               .setDescription(
                 `New bid for **${auc.item}** by __${int.user.tag}__!`
               )
-              .addField("Amount", `${bid}`),
+              .addFields([{ name: "Amount", value: `${bid}` }]),
           ],
           components: [row],
         });
@@ -239,7 +250,12 @@ const onInteraction = async ({ int, client }) => {
               )
               .setColor("RANDOM")
               .setDescription(`New bid for **${auc.item}** by __Anonymous__!`)
-              .addField("Amount", `${bid}`),
+              .addFields([
+                {
+                  name: "Amount",
+                  value: `${bid}`,
+                },
+              ]),
           ],
           components: [row],
         });
@@ -280,18 +296,20 @@ const onInteraction = async ({ int, client }) => {
               name: `Auction hosted using Aether`,
               url: "https://discord.com/invite/Vmfe56uMf6",
             })
-            .addField(`Sold at (Price)`, `${auc.price}`)
-            .addField(
-              `Sold to`,
-              auc.winner !== undefined ? `<@${auc.winner}>` : "No one!"
-            )
-            .addField("Item sold", auc.item)
-            .addField("Total bids", `${auc.totalBids}`)
-            .addField("Hosted by", `${int.user.tag}`)
-            .addField(
-              `Time since auction was started`,
-              `${ms(Date.now() - auc.startedAt)}`
-            ),
+            .addFields([
+              makeField(`Sold at (Price)`, `${auc.price}`),
+              makeField(
+                `Sold to`,
+                auc.winner !== undefined ? `<@${auc.winner}>` : "No one!"
+              ),
+              makeField("Item sold", auc.item),
+              makeField("Total bids", `${auc.totalBids}`),
+              makeField("Hosted by", `${int.user.tag}`),
+              makeField(
+                `Time since auction was started`,
+                `${ms(Date.now() - auc.startedAt)}`
+              ),
+            ]),
         ],
       });
       await auctionManager.deleteOne({ channelId: channel.id });
@@ -412,9 +430,10 @@ const onInteraction = async ({ int, client }) => {
         embeds: [
           new MessageEmbed()
             .setTitle("Auction price re-set!")
-            .addField("New Price", `${amount}`),
+            .addFields([makeField("New Price", `${amount}`)]),
         ],
       });
+
       await auctionManager.updateOne(
         {
           channelId: int.channel.id,
