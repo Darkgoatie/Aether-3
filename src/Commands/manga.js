@@ -493,9 +493,9 @@ const onInteraction = async ({ int }) => {
           .filter((ch) => isNaN(ch) === false)
       );
       let latestChapter = Math.max(
-        ...aggregationData.map((chap) =>
-          parseInt(chap.chapter, 10).filter((ch) => isNaN(ch) === false)
-        )
+        ...aggregationData
+          .map((chap) => parseInt(chap.chapter, 10))
+          .filter((ch) => isNaN(ch) === false)
       );
 
       const mangaData = await md.fetchMangaByID(mangaID);
