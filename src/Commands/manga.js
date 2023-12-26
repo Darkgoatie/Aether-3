@@ -331,7 +331,7 @@ const onInteraction = async ({ int }) => {
       const filter = (interaction) => interaction.customId === "selectmanga";
       const collector = sentMessage.createMessageComponentCollector({
         filter,
-        time: 45000,
+        time: 60000,
       }); // Change time as needed
 
       collector.on("collect", async (interaction) => {
@@ -343,12 +343,14 @@ const onInteraction = async ({ int }) => {
         const selectedCover = await md.fetchCoverArtByID(
           selectedManga.getCoverArt()
         );
+        /*
         await interaction.reply({
           ephemeral: true,
           content: `Now displaying ${selectedManga.title.en}!`,
         });
+        */
         await updateSelectMenu(interaction, selectedManga.title.en);
-        await sentMessage.edit({
+        await interaction.update({
           content: "ID: " + selectedManga.id,
           embeds: [
             new MessageEmbed()
