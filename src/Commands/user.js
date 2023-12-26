@@ -18,7 +18,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("info")
       .setDescription("Shows user info")
-      .addUserOption(opt =>
+      .addUserOption((opt) =>
         opt
           .setName("user")
           .setDescription("This user's info will be displayed!")
@@ -29,7 +29,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("roles")
       .setDescription("Shows the user's roles")
-      .addUserOption(opt =>
+      .addUserOption((opt) =>
         opt
           .setName("user")
           .setDescription("This user's roles will be displayed!")
@@ -58,7 +58,8 @@ const onInteraction = async ({ int, client }) => {
           new MessageEmbed()
             .setTitle("User Info")
             .setFooter({
-              iconURL: process.env.iconURL,
+              iconURL:
+                "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
               text: "Thank you for using Aether!",
             })
             .setColor("RANDOM")
@@ -78,7 +79,7 @@ const onInteraction = async ({ int, client }) => {
       mem = await int.guild.members.fetch(user.id);
       if (!mem) return;
       roles = [];
-      mem.roles.cache.forEach(rl => {
+      mem.roles.cache.forEach((rl) => {
         rl.name !== "@everyone"
           ? roles.push(`<@&${rl.id}> - ${rl.id}`)
           : undefined; // Remove @everyone from role list
@@ -92,7 +93,8 @@ const onInteraction = async ({ int, client }) => {
               name: `Command used by ${int.user.tag}`,
             })
             .setFooter({
-              iconURL: process.env.iconURL,
+              iconURL:
+                "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
               text: "Thank you for using Aether!",
             })
             .setDescription(roles.join(" \n"))

@@ -52,7 +52,8 @@ const onInteraction = async ({ int }) => {
           "/invite - Sends invite links of the bot and the support server"
         )
         .setFooter({
-          iconURL: process.env.iconURL,
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
           text: "Page 1/3 | Thank you for using Aether!",
         }),
     },
@@ -68,7 +69,8 @@ const onInteraction = async ({ int }) => {
           "Subcommands: \n/vouch give <Options> - (Same as old +1) Vouches someone\n/vouch check <Options> - Check the vouches of someone\n/vouch set <Options> - Set the vouches of someone\n/vouch config <Options> - Configure the vouch settings of this guild"
         )
         .setFooter({
-          iconURL: process.env.iconURL,
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
           text: "Page 2/3 | Thank you for using Aether!",
         }),
     },
@@ -76,7 +78,8 @@ const onInteraction = async ({ int }) => {
       no: 3,
       content: createBaseEmbed()
         .setFooter({
-          iconURL: process.env.iconURL,
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
           text: "Page 3/3 | Thank you for using Aether!",
         })
         .addFields([

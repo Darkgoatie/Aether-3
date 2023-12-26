@@ -1,7 +1,13 @@
 const { Mangadex } = require("mangadex-wrapper");
 const clientTrackedMangaModel = require("../managers/clientTrackedMangas");
 const trackedMangaModel = require("../managers/userTrackedLists");
-const { Client, MessageEmbed } = require("discord.js");
+const {
+  Client,
+  MessageEmbed,
+  MessageButton,
+  MessageActionRow,
+} = require("discord.js");
+const { getClientData } = require("./getClientData");
 
 const delay = async (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -26,6 +32,7 @@ function extractChapters(aggregation) {
  * @param {Client} client
  */
 const trackManga = async (client) => {
+  const clientData = await getClientData();
   const md = new Mangadex();
   mgs = await trackedMangaModel.aggregate([
     // Unwind the trackedManga array to have each manga as a separate document
@@ -90,9 +97,7 @@ const trackManga = async (client) => {
                 new MessageEmbed()
                   .setTitle(`New Chapter of ${m.title.en} released!`)
                   .setDescription(
-                    `Chapter ${latestChapter} has been released! \n [Mangadex URL](${encodeURI(
-                      m.getHumanURL()
-                    )})`
+                    `Chapter **${latestChapter}** of **${m.title.en}** has been released!`
                   )
                   .addFields([
                     {
@@ -100,6 +105,22 @@ const trackManga = async (client) => {
                       value: "```" + m.id + "```",
                     },
                   ]),
+              ],
+              components: [
+                new MessageActionRow().addComponents(
+                  new MessageButton()
+                    .setStyle("LINK")
+                    .setURL(encodeURI(m.getHumanURL()))
+                    .setLabel("Jump to Mangadex URL")
+                    .setEmoji("1188967636055371828"),
+                  new MessageButton()
+                    .setStyle("LINK")
+                    .setURL(
+                      `https://discord.com/api/oauth2/authorize?client_id=${clientData.id}&permissions=8&scope=bot%20applications.commands`
+                    )
+                    .setLabel("Invite Aether")
+                    .setEmoji("937284368202891295")
+                ),
               ],
             });
             await delay(100); // Delay of 100ms between each message

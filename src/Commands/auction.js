@@ -141,9 +141,13 @@ const onInteraction = async ({ int, client }) => {
         embeds: [
           new MessageEmbed()
             .setTitle("Auction started!")
-            .setThumbnail(int.guild.iconURL() || process.env.iconURL)
+            .setThumbnail(
+              int.guild.iconURL() ||
+                "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp"
+            )
             .setAuthor({
-              iconURL: process.env.iconURL,
+              iconURL:
+                "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
               name: `Auction hosted using Aether`,
               url: "https://discord.com/invite/Vmfe56uMf6",
             })
@@ -211,14 +215,15 @@ const onInteraction = async ({ int, client }) => {
             new MessageEmbed()
               .setTitle("New bid!")
               .setAuthor({
-                iconURL: process.env.iconURL,
+                iconURL:
+                  "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
                 name: `Auction hosted using Aether`,
                 url: "https://discord.com/invite/Vmfe56uMf6",
               })
               .setThumbnail(
                 int.guild.iconURL() !== null
                   ? int.guild.iconURL()
-                  : process.env.iconURL
+                  : "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp"
               )
               .setColor("RANDOM")
               .setDescription(
@@ -239,14 +244,15 @@ const onInteraction = async ({ int, client }) => {
             new MessageEmbed()
               .setTitle("New bid!")
               .setAuthor({
-                iconURL: process.env.iconURL,
+                iconURL:
+                  "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
                 name: `Auction hosted using Aether`,
                 url: "https://discord.com/invite/Vmfe56uMf6",
               })
               .setThumbnail(
                 int.guild.iconURL() !== null
                   ? int.guild.iconURL()
-                  : process.env.iconURL
+                  : "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp"
               )
               .setColor("RANDOM")
               .setDescription(`New bid for **${auc.item}** by __Anonymous__!`)
@@ -289,10 +295,11 @@ const onInteraction = async ({ int, client }) => {
             .setThumbnail(
               int.guild.iconURL() !== null
                 ? int.guild.iconURL()
-                : process.env.iconURL
+                : "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp"
             )
             .setAuthor({
-              iconURL: process.env.iconURL,
+              iconURL:
+                "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
               name: `Auction hosted using Aether`,
               url: "https://discord.com/invite/Vmfe56uMf6",
             })

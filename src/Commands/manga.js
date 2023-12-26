@@ -125,6 +125,13 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("trackinglist")
       .setDescription("Shows your manga tracking list")
+      .addBooleanOption((opt) =>
+        opt
+          .setName("displaydetails")
+          .setDescription(
+            "Should the details (MangaID, AuthorID) of be displayed? Default set to false."
+          )
+      )
   );
 
 /**
@@ -145,43 +152,71 @@ const onInteraction = async ({ int }) => {
       userdata = await trackedMangaModel
         .findOne({ userID: int.user.id })
         .exec();
-      if (userdata.trackedManga.length > 0) {
-        const mangas = await md.fetchManga({
-          ids: userdata.trackedManga,
-        });
 
-        const fields = mangas.map((m) => {
-          return {
-            name: m.title.en,
-            value: `ID: \n \`\`\`${
-              m.id
-            }\`\`\` \n Author ID: \n \`\`\`${m.getAuthor()}\`\`\` \n [Mangadex URL](${encodeURI(
-              m.getHumanURL()
-            )})`,
-            inline: true,
-          };
-        });
-
-        int.reply({
-          embeds: [
-            new MessageEmbed()
-              .setTitle("Tracking list of " + int.user.username)
-              .setFooter({
-                text: "Manga tracker by Aether | Credits to Mangadex API!",
-              })
-              .setTimestamp()
-              .addFields(fields)
-              .setColor("#aa1f24"),
-          ],
-        });
-      } else {
-        int.reply({
+      if (userdata.trackedManga.length === 0) {
+        return int.reply({
           ephemeral: true,
           content:
             "You don't have any tracked manga! \n __**3 Simple steps to track a manga:**__ \n 1.  Find a manga by name using `/manga search`. \n 2. Copy the Manga ID. \n 3. Use `/manga track` and input the id of the manga.",
         });
       }
-      break;
+
+      const displayDetailsOption =
+        int.options.getBoolean("displaydetails") !== true ? false : true;
+      switch (displayDetailsOption) {
+        case true:
+          fields = (
+            await md.fetchManga({
+              ids: userdata.trackedManga,
+            })
+          ).map((m) => {
+            return {
+              name: m.title.en,
+              value: `ID: \n \`\`\`${
+                m.id
+              }\`\`\` \n Author ID: \n \`\`\`${m.getAuthor()}\`\`\` \n [Mangadex URL](${encodeURI(
+                m.getHumanURL()
+              )})`,
+              inline: true,
+            };
+          });
+
+          return int.reply({
+            embeds: [
+              new MessageEmbed()
+                .setTitle("Tracking list of " + int.user.username)
+                .setFooter({
+                  text: "Manga tracker by Aether | Credits to Mangadex API!",
+                })
+                .setTimestamp()
+                .addFields(fields)
+                .setColor("#aa1f24"),
+            ],
+          });
+        case false:
+          return int.reply({
+            embeds: [
+              new MessageEmbed()
+                .setTitle("Tracking list of " + int.user.username)
+                .setFooter({
+                  text: "Manga tracker by Aether | Credits to Mangadex API!",
+                })
+                .setTimestamp()
+                .setDescription(
+                  (
+                    await md.fetchManga({
+                      ids: userdata.trackedManga,
+                    })
+                  )
+                    .map((m) => {
+                      return "- " + m.title.en;
+                    })
+                    .join("\n")
+                )
+                .setColor("#aa1f24"),
+            ],
+          });
+      }
     case "search":
       const title = int.options.getString("title");
       let mangas = await md.fetchManga({
@@ -239,6 +274,7 @@ const onInteraction = async ({ int }) => {
             .setColor("#aa1f20")
             .setImage(coverArt.getImageUrl())
             .setThumbnail(coverArt.getImageUrl())
+            .setTimestamp()
             .setDescription(
               truncateText(
                 mangas[0].description.en
@@ -260,13 +296,13 @@ const onInteraction = async ({ int }) => {
                 inline: true,
               },
               {
-                name: "Status",
-                value: `${mangas[0].status}`,
+                name: "Mangadex URL",
+                value: `[URL](${encodeURI(mangas[0].getHumanURL())})`,
                 inline: true,
               },
               {
-                name: "Mangadex URL",
-                value: `[URL](${encodeURI(mangas[0].getHumanURL())})`,
+                name: "Status",
+                value: `${mangas[0].status}`,
                 inline: true,
               },
               {
@@ -320,6 +356,7 @@ const onInteraction = async ({ int }) => {
               .setColor("#aa1f20")
               .setImage(coverArt.getImageUrl())
               .setThumbnail(coverArt.getImageUrl())
+              .setTimestamp()
               .setDescription(
                 truncateText(
                   selectedManga.description.en
@@ -337,13 +374,18 @@ const onInteraction = async ({ int }) => {
                   inline: true,
                 },
                 {
-                  name: "Mangadex URL",
-                  value: `[URL](${encodeURI(selectedManga.getHumanURL())})`,
+                  name: "ID",
+                  value: "```" + selectedManga.id + "```",
                   inline: true,
                 },
                 {
                   name: "Author",
                   value: `ID: \`\`\`${selectedManga.getAuthor()}\`\`\``,
+                  inline: true,
+                },
+                {
+                  name: "Mangadex URL",
+                  value: `[URL](${encodeURI(selectedManga.getHumanURL())})`,
                   inline: true,
                 },
                 {
@@ -422,7 +464,6 @@ const onInteraction = async ({ int }) => {
           .filter((ch) => isNaN(ch) === false);
 
         let latestChapter = Math.max(...toMathMax);
-        console.log(latestChapter);
 
         await clientTrackedMangaModel.create({
           mangaID,
@@ -437,6 +478,7 @@ const onInteraction = async ({ int }) => {
           new MessageEmbed()
             .setTitle(mangaToAdd.title.en)
             .setColor("#aa1f20")
+            .setTimestamp()
             .setDescription(
               truncateText(
                 mangaToAdd.description.en
@@ -555,6 +597,7 @@ const onInteraction = async ({ int }) => {
           new MessageEmbed()
             .setTitle(mangaToRemove.title.en)
             .setColor("#aa1f20")
+            .setTimestamp()
             .setDescription(
               truncateText(
                 mangaToRemove.description.en

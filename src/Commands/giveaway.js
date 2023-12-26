@@ -134,6 +134,11 @@ const onInteraction = async ({ int, client }) => {
           (e) => e.id === thisGuildConf.giveawaySettings.emoji
         );
       }
+      if (!tgEmoji)
+        tgEmoji = {
+          id: "866637037607845929",
+          name: "AetherGift",
+        };
       if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
         return int.reply({
           ephemeral: true,

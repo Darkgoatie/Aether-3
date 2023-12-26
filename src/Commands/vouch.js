@@ -130,7 +130,7 @@ const onInteraction = async ({ int, client }) => {
             .setThumbnail(
               int.guild.iconURL() !== null
                 ? int.guild.iconURL()
-                : process.env.iconURL
+                : "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp"
             )
             .setAuthor({
               name: `Configured by ${int.user.tag}`,
