@@ -52,7 +52,8 @@ const onInteraction = async ({ int }) => {
           "/invite - Sends invite links of the bot and the support server"
         )
         .setFooter({
-          iconURL: process.env.iconURL,
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
           text: "Page 1/3 | Thank you for using Aether!",
         }),
     },
@@ -68,16 +69,26 @@ const onInteraction = async ({ int }) => {
           "Subcommands: \n/vouch give <Options> - (Same as old +1) Vouches someone\n/vouch check <Options> - Check the vouches of someone\n/vouch set <Options> - Set the vouches of someone\n/vouch config <Options> - Configure the vouch settings of this guild"
         )
         .setFooter({
-          iconURL: process.env.iconURL,
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
           text: "Page 2/3 | Thank you for using Aether!",
         }),
     },
     {
       no: 3,
-      content: createBaseEmbed().setFooter({
-        iconURL: process.env.iconURL,
-        text: "Page 3/3 | Thank you for using Aether!",
-      }),
+      content: createBaseEmbed()
+        .setFooter({
+          iconURL:
+            "https://cdn.discordapp.com/avatars/805537268349665290/71fb39825db04396548d25d604a139bb.webp",
+          text: "Page 3/3 | Thank you for using Aether!",
+        })
+        .addFields([
+          {
+            name: "Manga",
+            value:
+              "Subcommands: \n/manga track <ID> - Start tracking a manga & get notified on new chapters.\n/manga untrack <ID> - Remove a manga from your tracking list. \n/manga search <Name> - Search a manga to obtain info about it.\n/manga trackinglist - Displays your current tracking list.\n/manga latestchapter <ID> - Learn the latest volume and chapter of manga.",
+          },
+        ]),
     },
   ];
 
@@ -85,7 +96,6 @@ const onInteraction = async ({ int }) => {
     components: [row],
     embeds: [pages.find((page) => page.no == pageNo).content],
   });
-  int.reply({ content: "A help menu was sent!", ephemeral: true });
   const filter = (i) =>
     i.customId.startsWith("help") && i.customId.endsWith(int.user.id);
   const collector = int.channel.createMessageComponentCollector({
@@ -129,7 +139,7 @@ const onInteraction = async ({ int }) => {
     });
     sentMessage.edit({
       components: [row],
-      embeds: [pages.find((page) => page.no == pageNo).content],
+      embeds: [pages.find((page) => page.no === pageNo).content],
     });
   });
 };

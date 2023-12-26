@@ -18,32 +18,32 @@ const builder = new SlashCommandBuilder()
       // .addIntegerOption(opt => opt.setName("days").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(6))
       // .addIntegerOption(opt => opt.setName("hours").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(23))
       // .addIntegerOption(opt => opt.setName("minutes").setDescription("Giveaway Length").setRequired(true).setMinValue(0).setMaxValue(59))
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("time")
           .setDescription("The time the giveaway will end in.")
           .setRequired(true)
       )
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("prize")
           .setDescription("The Prize of the giveaway")
           .setRequired(true)
       )
-      .addIntegerOption(opt =>
+      .addIntegerOption((opt) =>
         opt
           .setName("winners")
           .setDescription("The amount of winners in this giveaway")
           .setMaxValue(10)
           .setMinValue(1)
       )
-      .addChannelOption(opt =>
+      .addChannelOption((opt) =>
         opt
           .setName("channel")
           .setDescription("The channel to put the giveaway in")
-          .addChannelType(ChannelType.GuildText)
+          .addChannelTypes(ChannelType.GuildText)
       )
-      .addRoleOption(opt =>
+      .addRoleOption((opt) =>
         opt
           .setName("mention")
           .setDescription("The role to ping after starting the giveaway")
@@ -53,7 +53,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("end")
       .setDescription("Ends an active giveaway")
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("id")
           .setDescription("The ID of the giveaway that will be ended")
@@ -64,7 +64,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("reroll")
       .setDescription("Rerolls an ended giveaway")
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("id")
           .setDescription("The ID of the giveaway that will be rerolled")
@@ -75,18 +75,18 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("list")
       .setDescription("Lists filtered giveaways")
-      .addChannelOption(opt =>
+      .addChannelOption((opt) =>
         opt
           .setName("channel")
           .setDescription("Filter to see the giveaways of a channel.")
-          .addChannelType(ChannelType.GuildText)
+          .addChannelTypes(ChannelType.GuildText)
       )
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("prize")
           .setDescription("Filter to see the giveaways of a prize.")
       )
-      .addBooleanOption(opt =>
+      .addBooleanOption((opt) =>
         opt
           .setName("ended")
           .setDescription("Filter to see the giveaways that are ended or not.")
@@ -96,7 +96,7 @@ const builder = new SlashCommandBuilder()
     new SlashCommandSubcommandBuilder()
       .setName("setemoji")
       .setDescription("Sets the default giveaway emoji for this server.")
-      .addStringOption(opt =>
+      .addStringOption((opt) =>
         opt
           .setName("emoji")
           .setDescription("The name of the emoji that'll be set as default")
@@ -124,16 +124,21 @@ const onInteraction = async ({ int, client }) => {
         typeof thisGuildConf.giveawaySettings.emoji !== undefined ||
         thisGuildConf.giveawaySettings.emoji === null ||
         typeof int.guild.emojis.find(
-          e => e.id === thisGuildConf.giveawaySettings.emoji
+          (e) => e.id === thisGuildConf.giveawaySettings.emoji
         ) !== "undefined"
       ) {
         Cemoji = int.guild.emojis.cache.find(
-          e => e.id === thisGuildConf.giveawaySettings.emoji
+          (e) => e.id === thisGuildConf.giveawaySettings.emoji
         );
         tgEmoji = int.guild.emojis.cache.find(
-          e => e.id === thisGuildConf.giveawaySettings.emoji
+          (e) => e.id === thisGuildConf.giveawaySettings.emoji
         );
       }
+      if (!tgEmoji)
+        tgEmoji = {
+          id: "866637037607845929",
+          name: "AetherGift",
+        };
       if (!int.member.permissions.has(Permissions.FLAGS.MANAGE_MESSAGES))
         return int.reply({
           ephemeral: true,
@@ -204,7 +209,7 @@ const onInteraction = async ({ int, client }) => {
             content: `Giveaway with id "${messageId}" was ended!`,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           int.reply({
             ephemeral: true,
             content: `This giveaway was not found!`,
@@ -227,7 +232,7 @@ const onInteraction = async ({ int, client }) => {
             content: `Giveaway with id "${messageId}" was rerolled!`,
           });
         })
-        .catch(err => {
+        .catch((err) => {
           int.reply({
             ephemeral: true,
             content: `This giveaway was not found!`,
@@ -239,15 +244,15 @@ const onInteraction = async ({ int, client }) => {
       ftrChannel = int.options.getChannel("channel");
       ftrPrize = int.options.getString("prize");
       ftrEnded = int.options.getBoolean("ended");
-      gws = gws.filter(gw => gw.guildId === int.guild.id);
+      gws = gws.filter((gw) => gw.guildId === int.guild.id);
       if (ftrChannel !== null)
-        gws = gws.filter(gw => gw.channelId == ftrChannel.id);
-      if (ftrPrize !== null) gws = gws.filter(gw => gw.prize == ftrPrize);
-      if (ftrEnded !== null) gws = gws.filter(gw => gw.ended === ftrEnded);
+        gws = gws.filter((gw) => gw.channelId == ftrChannel.id);
+      if (ftrPrize !== null) gws = gws.filter((gw) => gw.prize == ftrPrize);
+      if (ftrEnded !== null) gws = gws.filter((gw) => gw.ended === ftrEnded);
       if (gws.length < 1)
         return int.reply("Couldn't find any giveaways matching these tags!");
       let n = 0;
-      gws = gws.map(gw => {
+      gws = gws.map((gw) => {
         n++;
         return {
           val: `Channel: <#${gw.channelId}>, Prize: ${gw.prize} `,
@@ -288,7 +293,7 @@ const onInteraction = async ({ int, client }) => {
         });
 
       emojiName = int.options.getString("emoji");
-      emoji = int.guild.emojis.cache.find(emj => emj.name === emojiName);
+      emoji = int.guild.emojis.cache.find((emj) => emj.name === emojiName);
 
       if (typeof emoji === "undefined" || emoji === null)
         return int.reply({

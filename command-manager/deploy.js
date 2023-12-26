@@ -1,11 +1,12 @@
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-
 const fs = require("node:fs");
 const path = require("node:path");
 const { getClientData } = require("../src/utils/getClientData");
 const run = async () => {
-  const { id: clientId, token } = await getClientData();
+  const clientData = await getClientData();
+  const clientId = clientData.id;
+  const token = clientData.token;
   const commands = [];
   // Grab all the command folders from the commands directory you created earlier
   const folderPath = path.join(__dirname, "../src/Commands");
@@ -43,7 +44,6 @@ const run = async () => {
       console.error(error);
     }
   })();
-  process.exit();
 };
 
 run();
